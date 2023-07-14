@@ -1,43 +1,32 @@
 import pygame, sys
 from ball import Ball
 
-ball = Ball()
 
 #Definir colores
 BLACK = (0,0,0)
-WHITE = (255,255,255)
 
 #Inicializar la librería
 pygame.init()
 
+
 #Crear ventana
-size = (800, 500)
-screen = pygame.display.set_mode(size)
+windowSize = (800, 500)
+screen = pygame.display.set_mode(windowSize)
 
 # Controla los FPS
 clock = pygame.time.Clock()
 
 
 #* Coordenadas del cuadrado
-large, height = screen.get_size()
+ball = Ball(30)
 
-pos_x = large/2
-pos_y = height/2
-
-side = 30
-
-
-
-#? Velocidad del cuadrado
-speed_x = 5
-speed_y = 5
+ball.get_ball_start(windowSize)
 
 
 #*Correr juego
 while True:
      #Registra todo lo de la ventana
      for event in pygame.event.get():
-          #print(event)
           #Saldrá al cerrar ventana
           if event.type == pygame.QUIT:
                sys.exit()
@@ -45,27 +34,15 @@ while True:
      #Color fondo
      screen.fill(BLACK)
      
-     #! --- Zona de animación ---
-
-     #Para que rebote el cuadrado
-     if pos_x > large-side or pos_x < 0:
-          speed_x *= -1
      
-     if pos_y > height-side or pos_y < 0:
-          speed_y *= -1
-
-     pos_x += speed_x
-     pos_y += speed_y
+     #! --- Zona de animación ---
+     #Para que rebote el cuadrado
+     ball.ball_movement(windowSize)
           
-
-     if pos_y == height-side and pos_x == large-side:          
-          print("Esquina!!!")
-
 
 
      #! --- Zona de dibujo ---
-     pygame.draw.rect(screen, WHITE, (pos_x, pos_y, side, side))
-
+     pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))
 
      #Actualizar pantalla
      pygame.display.flip()

@@ -2,7 +2,7 @@ import pygame, sys
 
 #Inicializar la librería
 pygame.init()
-
+pygame.display.set_caption('Pong Game')
 
 #Definir colores
 BLACK = (0,0,0)
@@ -26,10 +26,13 @@ org_ballPos_y = ball_coord_y = (height / 2) - (side / 2)
 
 # Paletas
 paleta_x = 10
+"""Ancho de la paleta"""
 paleta_y = 160
+"""Altura de la paleta"""
+
+#Pos inicial
 P1_coord_y = (height / 2) - (paleta_y / 2)
 P2_coord_y = (height / 2) - (paleta_y / 2)
-
 
 
 #velocidad
