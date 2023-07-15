@@ -1,5 +1,6 @@
 import pygame, sys
 from ball import Ball
+from player import Player
 
 #Inicializar la librería
 pygame.init()
@@ -10,7 +11,7 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 
 
-ball = Ball(30)
+ball = Ball(20)
 
 #Crear ventana
 large = 900
@@ -37,9 +38,11 @@ P1_coord_y = (height / 2) - (paleta_y / 2)
 P2_coord_y = (height / 2) - (paleta_y / 2)
 
 
+player_right = Player()
+
 # velocidad
 speed_P1 = 0
-speed_P2 = 0
+# speed_P2 = 0
 
 
 
@@ -51,40 +54,38 @@ while True:
           if event.type == pygame.QUIT:
                sys.exit()
 
+
           #! Eventos teclado
           #Al presionar tecla
           if event.type == pygame.KEYDOWN:
                if event.key == pygame.K_UP:
                     speed_P1 = -5
+
                if event.key == pygame.K_DOWN:
                     speed_P1 = 5
                
-               if event.key == pygame.K_w:
-                    speed_P2 = -5
-               if event.key == pygame.K_s:
-                    speed_P2 = 5
+               # if event.key == pygame.K_w:
+               #      speed_P2 = -5
+               # if event.key == pygame.K_s:
+               #      speed_P2 = 5
 
 
           #Al soltar tecla
           if event.type == pygame.KEYUP:
-               if event.key == pygame.K_UP:
-                    speed_P1 = 0
-               if event.key == pygame.K_DOWN:
+               if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     speed_P1 = 0
 
-               if event.key == pygame.K_w:
-                    speed_P2 = 0
-               if event.key == pygame.K_s:
-                    speed_P2 = 0
+               # if event.key == pygame.K_w or event.key == pygame.K_s:
+               #      speed_P2 = 0
 
 
 
      screen.fill(BLACK)
-     
+
      # --- Zona de animación ---
 
      P1_coord_y += speed_P1
-     P2_coord_y += speed_P2
+     # P2_coord_y += speed_P2
      
 
      #Mantiene jugadores en pantalla
@@ -96,11 +97,11 @@ while True:
           P1_coord_y = 0
           
      #Jugador 2
-     if P2_coord_y > height-paleta_y:
-          P2_coord_y = height-paleta_y
+     # if P2_coord_y > height-paleta_y:
+     #      P2_coord_y = height-paleta_y
      
-     if P2_coord_y < 0:
-          P2_coord_y = 0
+     # if P2_coord_y < 0:
+     #      P2_coord_y = 0
 
 
      #Movimiento de la pelota
@@ -114,7 +115,7 @@ while True:
      
      # Paletas
      pygame.draw.rect(screen, WHITE, (large-paleta_x, P1_coord_y, paleta_x, paleta_y))
-     pygame.draw.rect(screen, WHITE, (0, P2_coord_y, paleta_x, paleta_y))
+     # pygame.draw.rect(screen, WHITE, (0, P2_coord_y, paleta_x, paleta_y))
 
 
 
