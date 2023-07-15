@@ -1,4 +1,5 @@
 import pygame, sys
+from ball import Ball
 
 #Inicializar la librería
 pygame.init()
@@ -9,25 +10,26 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 
 
+ball = Ball(30)
+
 #Crear ventana
 large = 900
 height = 500
 
-size = (large, height)
-screen = pygame.display.set_mode(size)
+windowSize = (900, 500)
+screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
 
 # Pelota
-side = 20
-org_ballPos_x = ball_coord_x = (large / 2) - (side / 2)
-org_ballPos_y = ball_coord_y = (height / 2) - (side / 2)
+ball.get_ball_start(windowSize)
+
 
 
 # Paletas
 paleta_x = 10
 """Ancho de la paleta"""
-paleta_y = 160
+paleta_y = 125
 """Altura de la paleta"""
 
 #Pos inicial
@@ -35,11 +37,9 @@ P1_coord_y = (height / 2) - (paleta_y / 2)
 P2_coord_y = (height / 2) - (paleta_y / 2)
 
 
-#velocidad
-speed_ball = 10
+# velocidad
 speed_P1 = 0
 speed_P2 = 0
-
 
 
 
@@ -65,7 +65,6 @@ while True:
                     speed_P2 = 5
 
 
-
           #Al soltar tecla
           if event.type == pygame.KEYUP:
                if event.key == pygame.K_UP:
@@ -83,7 +82,6 @@ while True:
      screen.fill(BLACK)
      
      # --- Zona de animación ---
-     ball_coord_y += speed_ball
 
      P1_coord_y += speed_P1
      P2_coord_y += speed_P2
@@ -104,24 +102,14 @@ while True:
      if P2_coord_y < 0:
           P2_coord_y = 0
 
+
+     #Movimiento de la pelota
+     ball.ball_movement(windowSize)
      
-
-     #Regresa a su posición original al salir
-     if ball_coord_x >= large - (side/2) or ball_coord_x <= 0 - (side/2):
-          ball_coord_x = org_ballPos_x
-          ball_coord_y = org_ballPos_y
-
-     
-     if ball_coord_y > height-side or ball_coord_y < 0:
-          speed_ball *= -1
-
-
-     # Rebote en paleta
-
 
      # --- Zona de dibujo ---
      # Pelota
-     pygame.draw.rect(screen, WHITE, (ball_coord_x, ball_coord_y, side, side))
+     pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))
 
      
      # Paletas

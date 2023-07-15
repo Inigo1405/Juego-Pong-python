@@ -12,7 +12,7 @@ class Ball():
         self.pos_x = None
         self.pos_y = None
 
-        self.speed_x = 7
+        self.speed_x = 5
         self.speed_y = 5
 
 
@@ -30,11 +30,19 @@ class Ball():
     def ball_movement(self, windowSize):
         large, height = windowSize
 
-        if self.pos_x > (large-self.halfSize) or self.pos_x < self.halfSize:
-          self.speed_x *= -1
+        # if self.pos_x > (large-self.halfSize) or self.pos_x < self.halfSize:
+        #   self.speed_x *= -1
      
+        # Regresa a su posición original al salir
+        if self.pos_x >= large - (self.halfSize) or self.pos_x <= 0 - (self.halfSize):
+            self.pos_x = self.x_start
+            self.pos_y = self.y_start
+
+
+
         if self.pos_y > (height-self.halfSize) or self.pos_y < self.halfSize:
             self.speed_y *= -1
+
 
         self.pos_x += self.speed_x
         self.pos_y += self.speed_y
