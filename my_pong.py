@@ -8,15 +8,12 @@ pygame.display.set_caption('Pong Game')
 
 #Definir colores
 BLACK = (0,0,0)
-WHITE = (255,255,255)
-
 
 ball = Ball(20)
+p1 = Player(1)
+p2 = Player(2)
 
 #Crear ventana
-large = 900
-height = 500
-
 windowSize = (900, 500)
 screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
@@ -25,31 +22,15 @@ clock = pygame.time.Clock()
 # Pelota
 ball.get_ball_start(windowSize)
 
+#Paletas jugadores
+p1.get_player_start(windowSize)
+p2.get_player_start(windowSize)
 
-
-# Paletas
-paleta_x = 10
-"""Ancho de la paleta"""
-paleta_y = 125
-"""Altura de la paleta"""
-
-#Pos inicial
-P1_coord_y = (height / 2) - (paleta_y / 2)
-P2_coord_y = (height / 2) - (paleta_y / 2)
-
-
-player_right = Player()
-
-# velocidad
-speed_P1 = 0
-# speed_P2 = 0
-
-
-
+# Variables para mantener el seguimiento de las teclas presionadas
+teclas_presionadas = set()
 while True:
      #Registra todo lo de la ventana
      for event in pygame.event.get():
-          #print(event)
           #Saldrá al cerrar ventana
           if event.type == pygame.QUIT:
                sys.exit()
@@ -58,50 +39,35 @@ while True:
           #! Eventos teclado
           #Al presionar tecla
           if event.type == pygame.KEYDOWN:
-               if event.key == pygame.K_UP:
-                    speed_P1 = -5
-
-               if event.key == pygame.K_DOWN:
-                    speed_P1 = 5
-               
-               # if event.key == pygame.K_w:
-               #      speed_P2 = -5
-               # if event.key == pygame.K_s:
-               #      speed_P2 = 5
-
-
+               teclas_presionadas.add(event.key)
           #Al soltar tecla
           if event.type == pygame.KEYUP:
-               if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                    speed_P1 = 0
+               teclas_presionadas.discard(event.key)
 
-               # if event.key == pygame.K_w or event.key == pygame.K_s:
-               #      speed_P2 = 0
+     
+     # Actualizar las velocidades en el bucle principal del juego
+     if pygame.K_UP in teclas_presionadas:
+          p1.speed_y = -5
+     elif pygame.K_DOWN in teclas_presionadas:
+          p1.speed_y = 5
+     else:
+          p1.speed_y = 0
 
+     if pygame.K_w in teclas_presionadas:
+          p2.speed_y = -5
+     elif pygame.K_s in teclas_presionadas:
+          p2.speed_y = 5
+     else:
+          p2.speed_y = 0
 
 
      screen.fill(BLACK)
 
-     # --- Zona de animación ---
-
-     P1_coord_y += speed_P1
-     # P2_coord_y += speed_P2
-     
+     # --- Zona de animación --- 
 
      #Mantiene jugadores en pantalla
-     #Jugador 1
-     if P1_coord_y > height-paleta_y:
-          P1_coord_y = height-paleta_y
-
-     if P1_coord_y < 0:
-          P1_coord_y = 0
-          
-     #Jugador 2
-     # if P2_coord_y > height-paleta_y:
-     #      P2_coord_y = height-paleta_y
-     
-     # if P2_coord_y < 0:
-     #      P2_coord_y = 0
+     p1.player_movement(windowSize)
+     p2.player_movement(windowSize)
 
 
      #Movimiento de la pelota
@@ -111,12 +77,11 @@ while True:
      # --- Zona de dibujo ---
      # Pelota
      pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))
-
      
-     # Paletas
-     pygame.draw.rect(screen, WHITE, (large-paleta_x, P1_coord_y, paleta_x, paleta_y))
-     # pygame.draw.rect(screen, WHITE, (0, P2_coord_y, paleta_x, paleta_y))
 
+     # Jugadores
+     pygame.draw.rect(screen, p1.color, (p1.pos_x, (p1.pos_y - p1.halfHeight), p1.width, p1.height))
+     pygame.draw.rect(screen, p2.color, (p2.pos_x, (p2.pos_y - p2.halfHeight), p2.width, p2.height))
 
 
      pygame.display.flip()

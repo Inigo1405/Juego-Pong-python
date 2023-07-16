@@ -16,7 +16,9 @@ class Ball():
         self.speed_y = 5
 
 
+
     def get_ball_start(self, windowSize):
+        """Define el centro de la pantalla como el inicio"""
         large, height = windowSize
 
         self.x_start = large / 2
@@ -28,16 +30,12 @@ class Ball():
 
 
     def ball_movement(self, windowSize):
-        large, height = windowSize
-
-        # if self.pos_x > (large-self.halfSize) or self.pos_x < self.halfSize:
-        #   self.speed_x *= -1
+        width, height = windowSize
      
         # Regresa a su posición original al salir
-        if self.pos_x >= large - (self.halfSize) or self.pos_x <= 0 - (self.halfSize):
+        if self.pos_x >= width - (self.halfSize) or self.pos_x <= -self.halfSize:
             self.pos_x = self.x_start
             self.pos_y = self.y_start
-
 
 
         if self.pos_y > (height-self.halfSize) or self.pos_y < self.halfSize:
