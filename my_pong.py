@@ -3,8 +3,21 @@ from ball import Ball
 from player import Player
 
 
-def collision_ball():
-     pass
+def collision_ball(windowSize):
+     width, height = windowSize
+     ball_x1, ball_y1, ball_x2, ball_y2 = ball.hitBox
+
+     if ball_x1 > width/2:
+          player_x1, player_y1, player_x2, player_y2 = p2.hitBox
+          
+          if ball_x1 >= player_x2 and ball_y1 <= player_y2 and ball_y2 >= player_y1:
+               ball.speed_x *= -1
+
+     else:
+          player_x1, player_y1, player_x2, player_y2 = p1.hitBox
+          
+          if ball_x2 <= player_x1 and ball_y1 <= player_y2 and ball_y2 >= player_y1:
+               ball.speed_x *= -1
 
 
 #Inicializar la librería
@@ -30,9 +43,13 @@ ball.get_ball_start(windowSize)
 p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
 
+# Cargar la fuente
+font = pygame.font.Font("undertale.ttf", 50)
+
 # Variables para mantener el seguimiento de las teclas presionadas
 teclas_presionadas = set()
 while True:
+     screen.fill(BLACK)
      #Registra todo lo de la ventana
      for event in pygame.event.get():
           #Saldrá al cerrar ventana
@@ -49,27 +66,31 @@ while True:
 
      
      # Actualizar las velocidades en el bucle principal del juego
-     p1.actualizar_velocidades(teclas_presionadas)
-     p2.actualizar_velocidades(teclas_presionadas)
+     p1.update_player_speed(teclas_presionadas)
+     p2.update_player_speed(teclas_presionadas)
 
-
-     screen.fill(BLACK)
 
      # --- Zona de animación --- 
-
      #Mantiene jugadores en pantalla
      p1.player_movement(windowSize)
      p2.player_movement(windowSize)
 
+     # print("P2: ", p2.hitBox)
 
 
      #Movimiento de la pelota
      ball.ball_movement(windowSize)
      
 
-     
+     collision_ball(windowSize)
+
 
      # --- Zona de dibujo ---
+     # Texto
+     text = font.render(str(0), True, ball.color)
+     text_rect = text.get_rect(center=(windowSize[0] // 2, windowSize[1] // 2))
+     screen.blit(text, text_rect)
+
      # Pelota
      pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))
      

@@ -11,6 +11,7 @@ class Player():
           self.numPlayer = numPlayer
 
           self.speed_y = 0 
+          self.maxSpeed = 6
           self.color = (255,255,255)
 
           self.y_start = None
@@ -67,19 +68,19 @@ class Player():
 
 
      
-     def actualizar_velocidades(self, teclas_presionadas):
+     def update_player_speed(self, teclas_presionadas):
           if self.numPlayer == 1:
                if K_w in teclas_presionadas:
-                    self.speed_y = -5
+                    self.speed_y = -self.maxSpeed
                elif K_s in teclas_presionadas:
-                    self.speed_y = 5
+                    self.speed_y = self.maxSpeed
                else:
                     self.speed_y = 0
           
           elif self.numPlayer == 2:
                if K_UP in teclas_presionadas:
-                    self.speed_y = -5
+                    self.speed_y = -self.maxSpeed
                elif K_DOWN in teclas_presionadas:
-                    self.speed_y = 5
+                    self.speed_y = self.maxSpeed
                else:
                     self.speed_y = 0
