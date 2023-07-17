@@ -2,6 +2,11 @@ import pygame, sys
 from ball import Ball
 from player import Player
 
+
+def collision_ball():
+     pass
+
+
 #Inicializar la librería
 pygame.init()
 pygame.display.set_caption('Pong Game')
@@ -17,7 +22,6 @@ p2 = Player(2)
 windowSize = (900, 500)
 screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
-
 
 # Pelota
 ball.get_ball_start(windowSize)
@@ -35,7 +39,6 @@ while True:
           if event.type == pygame.QUIT:
                sys.exit()
 
-
           #! Eventos teclado
           #Al presionar tecla
           if event.type == pygame.KEYDOWN:
@@ -46,19 +49,8 @@ while True:
 
      
      # Actualizar las velocidades en el bucle principal del juego
-     if pygame.K_UP in teclas_presionadas:
-          p1.speed_y = -5
-     elif pygame.K_DOWN in teclas_presionadas:
-          p1.speed_y = 5
-     else:
-          p1.speed_y = 0
-
-     if pygame.K_w in teclas_presionadas:
-          p2.speed_y = -5
-     elif pygame.K_s in teclas_presionadas:
-          p2.speed_y = 5
-     else:
-          p2.speed_y = 0
+     p1.actualizar_velocidades(teclas_presionadas)
+     p2.actualizar_velocidades(teclas_presionadas)
 
 
      screen.fill(BLACK)

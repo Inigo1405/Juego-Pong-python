@@ -3,7 +3,7 @@ class Ball():
         self.sizeBall = size
         self.halfSize = size / 2
 
-        # self.hitBox = []
+        self.hitBox = [0, 0, 0, 0]
         self.color = (255,255,255)
 
         self.x_start = None
@@ -44,4 +44,11 @@ class Ball():
 
         self.pos_x += self.speed_x
         self.pos_y += self.speed_y
+        
+        self.hitBox[0] = self.pos_x + self.halfSize
+        self.hitBox[1] = self.pos_y + self.halfSize
+        self.hitBox[2] = self.pos_x - self.halfSize
+        self.hitBox[3] = self.pos_y - self.halfSize
+
+        print(self.hitBox)
     

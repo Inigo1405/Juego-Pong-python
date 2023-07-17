@@ -1,3 +1,5 @@
+from pygame import K_UP, K_DOWN, K_w, K_s
+
 class Player():
      def __init__(self, numPlayer):
           self.width = 10  # Ancho de la paleta
@@ -44,5 +46,24 @@ class Player():
           if self.pos_y <= 0 + self.halfHeight:
                self.pos_y = 0 + self.halfHeight
 
-
           self.pos_y += self.speed_y
+          
+
+
+     
+     def actualizar_velocidades(self, teclas_presionadas):
+          if self.numPlayer == 1:
+               if K_UP in teclas_presionadas:
+                    self.speed_y = -5
+               elif K_DOWN in teclas_presionadas:
+                    self.speed_y = 5
+               else:
+                    self.speed_y = 0
+
+          elif self.numPlayer == 2:
+               if K_w in teclas_presionadas:
+                    self.speed_y = -5
+               elif K_s in teclas_presionadas:
+                    self.speed_y = 5
+               else:
+                    self.speed_y = 0
