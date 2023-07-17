@@ -46,9 +46,9 @@ class Ball():
         self.pos_y += self.speed_y
         
         self.hitBox[0] = self.pos_x + self.halfSize
-        self.hitBox[1] = self.pos_y + self.halfSize
+        self.hitBox[1] = self.pos_y - self.halfSize
         self.hitBox[2] = self.pos_x - self.halfSize
-        self.hitBox[3] = self.pos_y - self.halfSize
+        self.hitBox[3] = self.pos_y + self.halfSize
 
-        # print(self.hitBox)
+        print(self.hitBox)
     
