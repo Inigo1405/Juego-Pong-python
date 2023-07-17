@@ -50,5 +50,5 @@ class Ball():
         self.hitBox[2] = self.pos_x - self.halfSize
         self.hitBox[3] = self.pos_y - self.halfSize
 
-        print(self.hitBox)
+        # print(self.hitBox)
     

@@ -4,8 +4,10 @@ class Player():
      def __init__(self, numPlayer):
           self.width = 10  # Ancho de la paleta
           self.height = 0  # Altura de la paleta
+
           self.halfHeight = 0
 
+          self.hitBox = [0, 0, 0, 0]
           self.numPlayer = numPlayer
 
           self.speed_y = 0 
@@ -26,11 +28,12 @@ class Player():
 
           self.y_start = height / 2
 
+
           if self.numPlayer == 1:
-               self.pos_x = width - self.width
+               self.pos_x = 0
 
           elif self.numPlayer == 2:
-               self.pos_x = 0
+               self.pos_x = width - self.width
           
 
           self.pos_y = self.y_start
@@ -49,21 +52,34 @@ class Player():
           self.pos_y += self.speed_y
           
 
+          self.hitBox[1] = self.pos_y - self.halfHeight
+          self.hitBox[3] = self.pos_y + self.halfHeight
+
+          if self.numPlayer == 1:
+               self.hitBox[0] = self.pos_x + self.width
+               self.hitBox[2] = self.pos_x
+
+          elif self.numPlayer == 2:
+               self.hitBox[0] = self.pos_x + self.width
+               self.hitBox[2] = self.pos_x
+
+
+
 
      
      def actualizar_velocidades(self, teclas_presionadas):
           if self.numPlayer == 1:
-               if K_UP in teclas_presionadas:
-                    self.speed_y = -5
-               elif K_DOWN in teclas_presionadas:
-                    self.speed_y = 5
-               else:
-                    self.speed_y = 0
-
-          elif self.numPlayer == 2:
                if K_w in teclas_presionadas:
                     self.speed_y = -5
                elif K_s in teclas_presionadas:
+                    self.speed_y = 5
+               else:
+                    self.speed_y = 0
+          
+          elif self.numPlayer == 2:
+               if K_UP in teclas_presionadas:
+                    self.speed_y = -5
+               elif K_DOWN in teclas_presionadas:
                     self.speed_y = 5
                else:
                     self.speed_y = 0

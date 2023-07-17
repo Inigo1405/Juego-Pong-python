@@ -62,8 +62,11 @@ while True:
      p2.player_movement(windowSize)
 
 
+
      #Movimiento de la pelota
      ball.ball_movement(windowSize)
+     
+
      
 
      # --- Zona de dibujo ---
