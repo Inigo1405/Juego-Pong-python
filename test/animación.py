@@ -1,7 +1,5 @@
 import pygame, sys
-from ball import Ball
 
-ball = Ball()
 
 #Definir colores
 BLACK = (0,0,0)
