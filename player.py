@@ -53,6 +53,7 @@ class Player():
           self.pos_y += self.speed_y
           
 
+          #HitBox values
           self.hitBox[1] = self.pos_y - self.halfHeight
           self.hitBox[3] = self.pos_y + self.halfHeight
 
