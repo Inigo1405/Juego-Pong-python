@@ -23,9 +23,9 @@ class GameManager:
 
 
      def ball_restart(self):
-          if self.pos_x >= (self.screen[0] - self.halfSize) or self.pos_x <= -self.halfSize:
-               self.pos_x = self.x_start
-               self.pos_y = self.y_start
+          if self.ball.pos_x > self.screen[0] + self.ball.halfSize or self.ball.pos_x <= -self.ball.halfSize:
+               self.ball.pos_x = self.ball.x_start
+               self.ball.pos_y = self.ball.y_start
 
 
      

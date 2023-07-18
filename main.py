@@ -7,7 +7,6 @@ from player import Player
 from gameManager import GameManager
 
 
-
 #Inicializar la librería
 pygame.init()
 pygame.display.set_caption('Pong Game')
@@ -73,6 +72,7 @@ while True:
      #Movimiento de la pelota
      ball.ball_movement(windowSize)
 
+     game_manager.ball_restart()
      game_manager.collision_ball()
 
 

@@ -1,5 +1,3 @@
-from gameManager import GameManager
-
 class Ball():
     def __init__(self, size):
         self.sizeBall = size
@@ -31,19 +29,9 @@ class Ball():
 
 
 
-    def ball_movement(self, windowSize, ):
-        width, height = windowSize
-     
-        # Regresa a su posición original al salir
-        # if self.pos_x >= width - (self.halfSize) or self.pos_x <= -self.halfSize:
-        #     self.pos_x = self.x_start
-        #     self.pos_y = self.y_start
-        # game_manager.ball_restart()
-
-
-        if self.pos_y > (height-self.halfSize) or self.pos_y < self.halfSize:
+    def ball_movement(self, windowSize):
+        if self.pos_y > (windowSize[1]-self.halfSize) or self.pos_y < self.halfSize:
             self.speed_y *= -1
-
 
         self.pos_x += self.speed_x
         self.pos_y += self.speed_y
