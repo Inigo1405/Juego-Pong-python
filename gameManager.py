@@ -1,4 +1,4 @@
-# from player import p1, p2
+from pointsMarker import Points_marker
 
 class GameManager:
      def __init__(self, player1, player2, ball, windowSize):
@@ -7,6 +7,10 @@ class GameManager:
 
           self.ball = ball
           self.screen = windowSize
+
+          self.p1_marker = Points_marker(windowSize)
+          # self.p2_marker = Points_marker(windowSize)
+
 
 
      def collision_ball(self):
@@ -22,10 +26,21 @@ class GameManager:
                self.ball.speed_x *= -1
 
 
+
      def ball_restart(self):
           if self.ball.pos_x > self.screen[0] + self.ball.halfSize or self.ball.pos_x <= -self.ball.halfSize:
                self.ball.pos_x = self.ball.x_start
                self.ball.pos_y = self.ball.y_start
+          
+          if self.ball.pos_x > self.screen[0] + self.ball.halfSize:
+               self.p1.points += 1
+          else:
+               self.p2.points += 1
+
+          # self.player_points(screen)
 
 
-     
+
+     def player_points(self, screen):
+          self.p1_marker.set_number(self.p1.points)
+          self.p1_marker.draw(screen)

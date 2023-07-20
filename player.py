@@ -7,6 +7,7 @@ class Player():
 
           self.halfHeight = 0
 
+          self.points = 0
           self.hitBox = [0, 0, 0, 0]
           self.numPlayer = numPlayer
 
@@ -51,7 +52,6 @@ class Player():
                self.pos_y = 0 + self.halfHeight
 
           self.pos_y += self.speed_y
-          
 
           #HitBox values
           self.hitBox[1] = self.pos_y - self.halfHeight
@@ -64,8 +64,6 @@ class Player():
           elif self.numPlayer == 2:
                self.hitBox[0] = self.pos_x + self.width
                self.hitBox[2] = self.pos_x
-
-
 
 
      

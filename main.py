@@ -1,7 +1,6 @@
 import pygame, sys
 import random
 
-from pointsMarker import Points_marker
 from ball import Ball
 from player import Player
 from gameManager import GameManager
@@ -33,8 +32,8 @@ p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
 
 # Cargar la fuente
-player1_points_marker = Points_marker(windowSize)
-player2_points_marker = Points_marker(windowSize)
+# player1_points_marker = Points_marker(windowSize)
+# player2_points_marker = Points_marker(windowSize)
 
 # Variables para mantener el seguimiento de las teclas presionadas
 teclas_presionadas = set()
@@ -60,7 +59,7 @@ while True:
      p2.update_player_speed(teclas_presionadas)
 
 
-     player1_points_marker.set_number(p1.hitBox[1])
+     #player1_points_marker.set_number(p1.hitBox[1])
 
      
      # --- Zona de animación --- 
@@ -75,10 +74,11 @@ while True:
      game_manager.ball_restart()
      game_manager.collision_ball()
 
+     game_manager.player_points(screen)
 
      # --- Zona de dibujo ---
      # Texto
-     player1_points_marker.draw(screen)
+     #player1_points_marker.draw(screen)
 
      # Pelota
      pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))
