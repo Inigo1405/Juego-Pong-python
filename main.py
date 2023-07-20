@@ -1,9 +1,9 @@
 import pygame, sys
 import random
 
-from ball import Ball
-from player import Player
-from gameManager import GameManager
+from module.ball import Ball
+from module.player import Player
+from module.gameManager import GameManager
 
 
 #Inicializar la librería
@@ -74,11 +74,10 @@ while True:
 
      game_manager.collision_ball()
 
-     game_manager.player_points(screen)
 
      # --- Zona de dibujo ---
      # Texto
-     #player1_points_marker.draw(screen)
+     game_manager.player_points(screen)
 
      # Pelota
      pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))

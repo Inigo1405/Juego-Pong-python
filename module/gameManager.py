@@ -1,6 +1,7 @@
 import time
 from pygame import draw
-from pointsMarker import Points_marker
+from module.pointsMarker import Points_marker
+
 class GameManager:
      def __init__(self, player1, player2, ball, windowSize):
           self.p1 = player1

@@ -2,7 +2,7 @@ from pygame import font
 
 class Points_marker():
      def __init__(self):
-          self.font = font.Font("undertale.ttf", 50)
+          self.font = font.Font("module/resource/undertale.ttf", 50)
           self.position = [0, 40]
           self.color = (255, 255, 255)
           self.number = 0
