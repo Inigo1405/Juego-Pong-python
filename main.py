@@ -69,9 +69,9 @@ while True:
 
 
      #Movimiento de la pelota
+     game_manager.ball_restart()
      ball.ball_movement(windowSize)
 
-     game_manager.ball_restart()
      game_manager.collision_ball()
 
      game_manager.player_points(screen)
