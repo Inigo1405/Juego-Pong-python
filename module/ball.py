@@ -12,8 +12,13 @@ class Ball():
         self.pos_x = None
         self.pos_y = None
 
-        self.speed_x = 5
-        self.speed_y = 5
+        self.speed_x_start = 5
+        self.speed_y_start = 5
+        
+        self.speed_x = self.speed_x_start
+        self.speed_y = self.speed_y_start
+
+        self.last_angle = 0
 
 
 

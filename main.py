@@ -4,6 +4,7 @@ import random
 from module.ball import Ball
 from module.player import Player
 from module.gameManager import GameManager
+from module.pointsMarker import Points_marker
 
 
 #Inicializar la librería
@@ -14,7 +15,7 @@ pygame.display.set_caption('Pong Game')
 BLACK = (0,0,0)
 
 #Crear ventana
-windowSize = (900, 500)
+windowSize = (900, 600)
 screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
@@ -31,35 +32,46 @@ ball.get_ball_start(windowSize)
 p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
 
-# Cargar la fuente
-# player1_points_marker = Points_marker(windowSize)
-# player2_points_marker = Points_marker(windowSize)
 
 # Variables para mantener el seguimiento de las teclas presionadas
 teclas_presionadas = set()
+
+
 while True:
      screen.fill(BLACK)
-     #Registra todo lo de la ventana
+     # Registra todo lo de la ventana
      for event in pygame.event.get():
           #Saldrá al cerrar ventana
           if event.type == pygame.QUIT:
                sys.exit()
 
           #! Eventos teclado
-          #Al presionar tecla
+          # Al presionar tecla
           if event.type == pygame.KEYDOWN:
                teclas_presionadas.add(event.key)
-          #Al soltar tecla
+          # Al soltar tecla
           if event.type == pygame.KEYUP:
                teclas_presionadas.discard(event.key)
 
+          #print(event)
      
+     # Start
+     # while start_button != True:
+     #      for event in pygame.event.get():
+     #           if event.type == pygame.QUIT:
+     #                sys.exit()
+
+     #           if event.type == pygame.KEYDOWN:
+     #                if event.key == pygame.K_SPACE:
+     #                     teclas_presionadas.add(event.key)
+     #                     start_button = True
+     
+     game_manager.start_game()
+
+
      # Actualizar las velocidades en el bucle principal del juego
      p1.update_player_speed(teclas_presionadas)
      p2.update_player_speed(teclas_presionadas)
-
-
-     #player1_points_marker.set_number(p1.hitBox[1])
 
      
      # --- Zona de animación --- 
@@ -68,7 +80,7 @@ while True:
      p2.player_movement(windowSize)
 
 
-     #Movimiento de la pelota
+     # Movimiento de la pelota
      game_manager.ball_restart()
      ball.ball_movement(windowSize)
 
