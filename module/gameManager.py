@@ -1,15 +1,16 @@
 import time
-import pygame, sys
-from pygame import draw
+from sys import exit
+from pygame import draw, event, QUIT, KEYDOWN, K_SPACE
 from module.pointsMarker import Points_marker
 
 class GameManager:
-     def __init__(self, player1, player2, ball, windowSize):
+     def __init__(self, player1, player2, ball, windowSize, screen):
           self.p1 = player1
           self.p2 = player2
 
           self.ball = ball
           self.windowSize = windowSize
+          self.screen = screen
 
           self.p1_marker = Points_marker()
           self.p2_marker = Points_marker()
@@ -17,15 +18,15 @@ class GameManager:
           self.start_button = False
 
 
-     def start_game(self, ):
-          while self.start_button != True:
-               for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                         sys.exit()
+     def start_game(self):
+          for evt in event.get():
+               if evt.type == QUIT:
+                    exit()
 
-                    if event.type == pygame.KEYDOWN:
-                         if event.key == pygame.K_SPACE:
-                              self.start_button = True
+               if evt.type == KEYDOWN:
+                    if evt.key == K_SPACE:
+                         return True
+          
 
 
      def collision_ball(self):
@@ -43,11 +44,9 @@ class GameManager:
                     #print("Up")
                     self.bounce_off_paddle('up')
 
-
                elif self.ball.pos_y >= player.pos_y + player.height/4:
                     #print("Down")
                     self.bounce_off_paddle('down')
-                    
 
                else:
                     #print("Center")
@@ -116,18 +115,18 @@ class GameManager:
 
      def _speedValues(self):
           # Aumento de la velocidad
-          if self.ball.speed_x > 0 and self.ball.speed_x < 13: 
-               self.ball.speed_x += 0.5
+          if self.ball.speed_x > 0 and self.ball.speed_x <= 15: 
+               self.ball.speed_x += 1
 
-          elif self.ball.speed_x > -13:
-               self.ball.speed_x -= 0.5
+          elif self.ball.speed_x >= -15:
+               self.ball.speed_x -= 1
 
 
-          if self.ball.speed_y > 0 and self.ball.speed_x < 10:
-               self.ball.speed_y += 0.5
+          if self.ball.speed_y > 0 and self.ball.speed_x <= 10:
+               self.ball.speed_y += 1
 
-          elif self.ball.speed_y > -10:
-               self.ball.speed_y -= 0.5
+          elif self.ball.speed_y >= -10:
+               self.ball.speed_y -= 1
           
 
 
@@ -151,10 +150,9 @@ class GameManager:
           
 
 
-     def player_points(self, screen):
+     def player_points(self):
           self.p1_marker.set_number(self.p1.points)
           self.p2_marker.set_number(self.p2.points)
           
-          
-          self.p1_marker.draw(screen, (self.windowSize[0] // 2) - 200)
-          self.p2_marker.draw(screen, (self.windowSize[0] // 2) + 200)
+          self.p1_marker.draw(self.screen, (self.windowSize[0] // 2) - 200)
+          self.p2_marker.draw(self.screen, (self.windowSize[0] // 2) + 200)

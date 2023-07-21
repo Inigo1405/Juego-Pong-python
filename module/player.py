@@ -12,7 +12,7 @@ class Player():
           self.numPlayer = numPlayer
 
           self.speed_y = 0 
-          self.maxSpeed = 6
+          self.maxSpeed = 7
           self.color = (255,255,255)
 
           self.y_start = None
