@@ -1,11 +1,8 @@
 import pygame, sys
-import random
 
-from module.ball import Ball
-from module.player import Player
 from module.gameManager import GameManager
-from module.pointsMarker import Points_marker
-
+from module.player import Player
+from module.ball import Ball
 
 #Inicializar la librería
 pygame.init()
@@ -34,9 +31,8 @@ p2.get_player_start(windowSize)
 
 
 # Variables para mantener el seguimiento de las teclas presionadas
-teclas_presionadas = set()
+pressed_key = set()
 start_button = False
-start_label = Points_marker(99)
 while True:
      screen.fill(BLACK)
      # Registra todo lo de la ventana
@@ -48,22 +44,22 @@ while True:
           #! Eventos teclado
           # Al presionar tecla
           if event.type == pygame.KEYDOWN:
-               teclas_presionadas.add(event.key)
+               pressed_key.add(event.key)
           # Al soltar tecla
           if event.type == pygame.KEYUP:
-               teclas_presionadas.discard(event.key)
+               pressed_key.discard(event.key)
 
 
-     
-
-
-
-     # Actualizar las velocidades en el bucle principal del juego
-     p1.update_player_speed(teclas_presionadas)
-     p2.update_player_speed(teclas_presionadas)
+     if not start_button:
+          start_button = game_manager.start_game(start_button)
 
      
      # --- Zona de animación --- 
+     # Actualizar las velocidades en el bucle principal del juego
+     p1.update_player_speed(pressed_key)
+     p2.update_player_speed(pressed_key)
+
+
      #Mantiene jugadores en pantalla
      p1.player_movement(windowSize)
      p2.player_movement(windowSize)
@@ -73,8 +69,8 @@ while True:
      game_manager.ball_restart()
      ball.ball_movement(windowSize)
 
+     # Golpeo de pelota
      game_manager.collision_ball()
-
 
      # --- Zona de dibujo ---
      # Texto
@@ -87,16 +83,8 @@ while True:
      pygame.draw.rect(screen, p1.color, (p1.pos_x, (p1.pos_y - p1.halfHeight), p1.width, p1.height))
      pygame.draw.rect(screen, p2.color, (p2.pos_x, (p2.pos_y - p2.halfHeight), p2.width, p2.height))
 
-     if not start_button:
-          screen.fill(BLACK) 
 
-          start_label.set_number('START GAME')
-          start_label.draw(screen, windowSize[0] // 2, windowSize[1] // 2) 
-
+     # Actualizar la pantalla completa
      pygame.display.flip()
-
-     while not start_button:
-          start_button = game_manager.start_game()
-          
-
+     # Frames
      clock.tick(60)

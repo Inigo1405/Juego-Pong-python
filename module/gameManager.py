@@ -1,6 +1,6 @@
 import time
 from sys import exit
-from pygame import draw, event, QUIT, KEYDOWN, K_SPACE
+from pygame import draw, event, QUIT, KEYDOWN, K_SPACE, display
 from module.pointsMarker import Points_marker
 
 class GameManager:
@@ -12,20 +12,27 @@ class GameManager:
           self.windowSize = windowSize
           self.screen = screen
 
+          self.start_label = Points_marker(100)
           self.p1_marker = Points_marker()
           self.p2_marker = Points_marker()
 
           self.start_button = False
 
 
-     def start_game(self):
-          for evt in event.get():
-               if evt.type == QUIT:
-                    exit()
+     def start_game(self, start_button):
+          while not start_button:
+               self.screen.fill((0,0,0)) 
+               self.start_label.set_number('START GAME')
+               self.start_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 2)
+               display.flip()
 
-               if evt.type == KEYDOWN:
-                    if evt.key == K_SPACE:
-                         return True
+               for evt in event.get():
+                    if evt.type == QUIT:
+                         exit()
+
+                    if evt.type == KEYDOWN:
+                         if evt.key == K_SPACE:
+                              return True
           
 
 
@@ -56,56 +63,29 @@ class GameManager:
 
      def bounce_off_paddle(self, side):
           self.ball.speed_x *= -1
-          #Jugador 2
-          if self.ball.pos_x > self.windowSize[0] // 2:
 
-               if side == 'up':
-                    if self.ball.last_angle != 0:
-                         self.ball.speed_y = +self.ball.last_angle
+          if side == 'up':
+               if self.ball.last_angle != 0:
+                    self.ball.speed_y = +self.ball.last_angle
 
-                    # Speed_y positivo
-                    if self.ball.speed_y > 0:
-                         self.ball.speed_y *= -1
-                    self._speedValues()
-                    self.ball.last_angle = 0
+               # Speed_y positivo
+               if self.ball.speed_y > 0:
+                    self.ball.speed_y *= -1
+               self._speedValues()
+               self.ball.last_angle = 0
 
+          elif side == 'down':
+               if self.ball.last_angle != 0:
+                    self.ball.speed_y = -self.ball.last_angle
 
-               if side == 'down':
-                    if self.ball.last_angle != 0:
-                         self.ball.speed_y = -self.ball.last_angle
-
-                    # Speed_y positivo
-                    if self.ball.speed_y < 0:
-                         self.ball.speed_y *= -1
-                    self._speedValues()
-                    self.ball.last_angle = 0
-
-          #Jugador 1
-          else:
-
-               if side == 'up':
-                    if self.ball.last_angle != 0:
-                         self.ball.speed_y = +self.ball.last_angle
-
-                    # Speed_y positivo
-                    if self.ball.speed_y > 0:
-                         self.ball.speed_y *= -1
-                    self._speedValues()
-                    self.ball.last_angle = 0
+               # Speed_y positivo
+               if self.ball.speed_y < 0:
+                    self.ball.speed_y *= -1
+               self._speedValues()
+               self.ball.last_angle = 0
 
 
-               if side == 'down':
-                    if self.ball.last_angle != 0:
-                         self.ball.speed_y = -self.ball.last_angle
-
-                    # Speed_y positivo
-                    if self.ball.speed_y < 0:
-                         self.ball.speed_y *= -1
-                    self._speedValues()
-                    self.ball.last_angle = 0
-
-
-          if side == 'center':
+          elif side == 'center':
                if self.ball.last_angle == 0:
                     self.ball.last_angle = abs(self.ball.speed_y)
                self._speedValues()
@@ -145,8 +125,6 @@ class GameManager:
                     self.p1.points += 1
                else:
                     self.p2.points += 1
-
-               #time.sleep(2)
           
 
 

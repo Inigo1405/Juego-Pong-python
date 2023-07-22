@@ -23,30 +23,24 @@ class Player():
 
     
      def get_player_start(self, windowSize):
-          width, height = windowSize
-
-          self.height = height / 4
+          self.height = windowSize[1] / 4
           self.halfHeight = self.height/2
 
-          self.y_start = height / 2
-
+          self.y_start = windowSize[1] / 2
 
           if self.numPlayer == 1:
                self.pos_x = 0
 
           elif self.numPlayer == 2:
-               self.pos_x = width - self.width
+               self.pos_x = windowSize[0] - self.width
           
-
           self.pos_y = self.y_start
 
      
 
      def player_movement(self, windowSize):
-          width, height = windowSize
-
-          if self.pos_y >= height - self.halfHeight:
-               self.pos_y = height - self.halfHeight
+          if self.pos_y >= windowSize[1] - self.halfHeight:
+               self.pos_y = windowSize[1] - self.halfHeight
 
           if self.pos_y <= 0 + self.halfHeight:
                self.pos_y = 0 + self.halfHeight
@@ -67,19 +61,19 @@ class Player():
 
 
      
-     def update_player_speed(self, teclas_presionadas):
+     def update_player_speed(self, pressed_key):
           if self.numPlayer == 1:
-               if K_w in teclas_presionadas:
+               if K_w in pressed_key:
                     self.speed_y = -self.maxSpeed
-               elif K_s in teclas_presionadas:
+               elif K_s in pressed_key:
                     self.speed_y = self.maxSpeed
                else:
                     self.speed_y = 0
           
           elif self.numPlayer == 2:
-               if K_UP in teclas_presionadas:
+               if K_UP in pressed_key:
                     self.speed_y = -self.maxSpeed
-               elif K_DOWN in teclas_presionadas:
+               elif K_DOWN in pressed_key:
                     self.speed_y = self.maxSpeed
                else:
                     self.speed_y = 0
