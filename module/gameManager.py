@@ -37,16 +37,17 @@ class GameManager:
 
 
      def collision_ball(self):
-          ball_x1, ball_y1, ball_x2, ball_y2 = self.ball.hitBox
-
-          if ball_x1 < self.windowSize[0] // 2:
+          # Define al jugador
+          if self.ball.pos_x < self.windowSize[0] // 2:
                player = self.p1
           else:
                player = self.p2
 
-          player_x1, player_y1, player_x2, player_y2 = player.hitBox
-          if ball_x1 >= player_x2 and ball_x2 <= player_x1 and ball_y1 <= player_y2 and ball_y2 >= player_y1:
+          ball_x1, ball_y1, ball_x2, ball_y2 = self.ball.hitBox
+          plr_x1, plr_y1, plr_x2, plr_y2 = player.hitBox
 
+          # Compara que impacte en la paleta
+          if ball_x1 >= plr_x2 and ball_x2 <= plr_x1 and ball_y1 <= plr_y2 and ball_y2 >= plr_y1:
                if self.ball.pos_y <= player.pos_y - player.height/4:
                     #print("Up")
                     self.bounce_off_paddle('up')
@@ -84,7 +85,6 @@ class GameManager:
                self._speedValues()
                self.ball.last_angle = 0
 
-
           elif side == 'center':
                if self.ball.last_angle == 0:
                     self.ball.last_angle = abs(self.ball.speed_y)
@@ -94,14 +94,14 @@ class GameManager:
 
 
      def _speedValues(self):
-          # Aumento de la velocidad
+          # Aumento de la velocidad en x
           if self.ball.speed_x > 0 and self.ball.speed_x <= 15: 
                self.ball.speed_x += 1
 
           elif self.ball.speed_x >= -15:
                self.ball.speed_x -= 1
 
-
+          # Aumento de la velocidad en y
           if self.ball.speed_y > 0 and self.ball.speed_x <= 10:
                self.ball.speed_y += 1
 
