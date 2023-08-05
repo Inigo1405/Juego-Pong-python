@@ -26,15 +26,17 @@ class Player():
           self.height = windowSize[1] / 4
           self.halfHeight = self.height/2
 
+          # Altura inicial
           self.y_start = windowSize[1] / 2
+          self.pos_y = self.y_start
 
+          # Lado del jugador
           if self.numPlayer == 1:
                self.pos_x = 0
 
           elif self.numPlayer == 2:
                self.pos_x = windowSize[0] - self.width
           
-          self.pos_y = self.y_start
 
      
 

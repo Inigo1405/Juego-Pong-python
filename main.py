@@ -10,6 +10,7 @@ pygame.display.set_caption('Pong Game')
 
 #Definir colores
 BLACK = (0,0,0)
+RED = (255, 0, 0)
 
 #Crear ventana
 windowSize = (900, 600)
@@ -28,6 +29,7 @@ ball.get_ball_start(windowSize)
 #Paletas jugadores
 p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
+
 
 
 # Variables para mantener el seguimiento de las teclas presionadas
@@ -73,15 +75,7 @@ while True:
      game_manager.collision_ball()
 
      # --- Zona de dibujo ---
-     # Texto
-     game_manager.player_points()
-
-     # Pelota
-     pygame.draw.rect(screen, ball.color, ((ball.pos_x - ball.halfSize), (ball.pos_y - ball.halfSize), ball.sizeBall, ball.sizeBall))
-     
-     # Jugadores
-     pygame.draw.rect(screen, p1.color, (p1.pos_x, (p1.pos_y - p1.halfHeight), p1.width, p1.height))
-     pygame.draw.rect(screen, p2.color, (p2.pos_x, (p2.pos_y - p2.halfHeight), p2.width, p2.height))
+     game_manager.draw_game()
 
 
      # Actualizar la pantalla completa
