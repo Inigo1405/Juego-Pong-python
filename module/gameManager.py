@@ -14,7 +14,8 @@ class GameManager:
           self.windowSize = windowSize
           self.screen = screen
 
-          self.start_label = Points_marker(100)
+          self.title_label = Points_marker(100)
+          self.start_label = Points_marker(45)
           self.p1_marker = Points_marker()
           self.p2_marker = Points_marker()
 
@@ -26,34 +27,35 @@ class GameManager:
           BLACK = (0,0,0)
 
           tiempo_transcurrido = 0
-          tiempo_maximo = 900  # 500 milisegundos (0.5 segundos)
-
-          texto_visible = True
-          color_fondo_visible = WHITE
+          tiempo_maximo = 400  # 1000 milisegundos (1 segundos)
+          texto_visible = False
 
           while not start_button:
+               if self.get_event():
+                    return True
+               
                tiempo_transcurrido += clock.tick()
                if tiempo_transcurrido >= tiempo_maximo:
-                    tiempo_transcurrido = 0
                     texto_visible = not texto_visible  # Cambiar visibilidad del texto
-                    color_fondo_visible = BLACK if texto_visible else WHITE
-                    
+                    tiempo_transcurrido = 0
+
 
                self.screen.fill(BLACK) 
                if texto_visible:
-                    self.start_label.set_number('PONG GAME')
+                    self.start_label.set_text('PRESS START', WHITE)
                     self.start_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 2)
+
+               self.title_label.set_text('PONG GAME')
+               self.title_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 5)
 
                pygame.display.flip()
 
-               if self.get_event():
-                    return True
 
           
 
 
      def collision_ball(self):
-          # Define al jugador
+          # Identifica al jugador
           if self.ball.pos_x < self.windowSize[0] // 2:
                player = self.p1
           else:
@@ -64,16 +66,16 @@ class GameManager:
 
           # Compara que impacte en la paleta
           if ball_x1 >= plr_x2 and ball_x2 <= plr_x1 and ball_y1 <= plr_y2 and ball_y2 >= plr_y1:
+               # Up
                if self.ball.pos_y <= player.pos_y - player.height/4:
-                    #print("Up")
                     self.bounce_off_paddle('up')
 
+               # Down
                elif self.ball.pos_y >= player.pos_y + player.height/4:
-                    #print("Down")
                     self.bounce_off_paddle('down')
 
+               # Center
                else:
-                    #print("Center")
                     self.bounce_off_paddle('center')
 
      
@@ -82,6 +84,7 @@ class GameManager:
           self.ball.speed_x *= -1
 
           if side == 'up':
+               # Recupera la velocidad en Y
                if self.ball.last_angle != 0:
                     self.ball.speed_y = +self.ball.last_angle
 
@@ -92,6 +95,7 @@ class GameManager:
                self.ball.last_angle = 0
 
           elif side == 'down':
+               # Recupera la velocidad en Y
                if self.ball.last_angle != 0:
                     self.ball.speed_y = -self.ball.last_angle
 
@@ -172,8 +176,8 @@ class GameManager:
 
      def player_points(self):
           # Indica el número de puntos
-          self.p1_marker.set_number(self.p1.points)
-          self.p2_marker.set_number(self.p2.points)
+          self.p1_marker.set_text(self.p1.points)
+          self.p2_marker.set_text(self.p2.points)
           
           # Dibuja en pantalla los puntos
           self.p1_marker.draw(self.screen, (self.windowSize[0] // 2) - 200)
@@ -182,13 +186,13 @@ class GameManager:
 
      
      def draw_game(self):
-          # Texto
+          # Text
           self.player_points()
 
-          # Pelota
+          # Ball
           rectBall = (self.ball.pos_x - self.ball.halfSize), (self.ball.pos_y - self.ball.halfSize), self.ball.sizeBall, self.ball.sizeBall
           pygame.draw.rect(self.screen, self.ball.color, (rectBall))
           
-          # Jugadores
+          # Players
           pygame.draw.rect(self.screen, self.p1.color, (self.p1.pos_x, (self.p1.pos_y - self.p1.halfHeight), self.p1.width, self.p1.height))
           pygame.draw.rect(self.screen, self.p2.color, (self.p2.pos_x, (self.p2.pos_y - self.p2.halfHeight), self.p2.width, self.p2.height))
