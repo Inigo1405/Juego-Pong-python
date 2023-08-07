@@ -21,7 +21,8 @@ clock = pygame.time.Clock()
 ball = Ball(20)
 p1 = Player(1)
 p2 = Player(2)
-game_manager = GameManager(p1, p2, ball, windowSize, screen)
+pressed_key = set()
+game_manager = GameManager(p1, p2, ball, windowSize, screen, pressed_key)
 
 # Ball
 ball.get_ball_start(windowSize)
@@ -35,8 +36,7 @@ pygame.mixer.music.load("module/resource/Veo en ti la luz.mp3")
 pygame.mixer.music.play(-1)
 
 
-# Variables para mantener el seguimiento de las teclas presionadas
-pressed_key = set()
+first_round = True
 start_button = False
 while True:
      screen.fill(BLACK)
@@ -58,6 +58,19 @@ while True:
      if not start_button:
           start_button = game_manager.start_game(start_button, clock)
 
+
+     if first_round:
+          # Permite eventos mientras sacan
+          time_elapsed = 0
+          screen.fill(BLACK)
+          while time_elapsed < 1200: # 1000 milisegundos (1 segundo)
+               game_manager.draw_game()
+               game_manager.get_event()
+               pygame.display.update()
+               time_elapsed += clock.tick(60)
+          first_round = False
+
+          
      
      # --- Zona de animación --- 
      # Actualizar las velocidades en el bucle principal del juego

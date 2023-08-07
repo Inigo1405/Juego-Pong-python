@@ -1,16 +1,15 @@
-import time
 import random
-from sys import exit
 import pygame
-#from pygame import draw, event, QUIT, KEYDOWN, K_SPACE, display
+from sys import exit
+
 from module.pointsMarker import Points_marker
 
 class GameManager:
-     def __init__(self, player1, player2, ball, windowSize, screen):
+     def __init__(self, player1, player2, ball, windowSize, screen, pressed_key):
           self.p1 = player1
           self.p2 = player2
-
           self.ball = ball
+
           self.windowSize = windowSize
           self.screen = screen
 
@@ -20,6 +19,8 @@ class GameManager:
           self.p2_marker = Points_marker()
 
           self.start_button = False
+          self.pressed_key = pressed_key
+
 
 
      def start_game(self, start_button, clock):
@@ -27,7 +28,6 @@ class GameManager:
           BLACK = (0,0,0)
 
           tiempo_transcurrido = 0
-          tiempo_maximo = 400  # 1000 milisegundos (1 segundos)
           texto_visible = False
 
           while not start_button:
@@ -35,7 +35,7 @@ class GameManager:
                     return True
                
                tiempo_transcurrido += clock.tick()
-               if tiempo_transcurrido >= tiempo_maximo:
+               if tiempo_transcurrido >= 400:
                     texto_visible = not texto_visible  # Cambiar visibilidad del texto
                     tiempo_transcurrido = 0
 
@@ -49,8 +49,6 @@ class GameManager:
                self.title_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 5)
 
                pygame.display.flip()
-
-
           
 
 
@@ -125,9 +123,12 @@ class GameManager:
           if self.ball.speed_y > 0 and self.ball.speed_x <= 10:
                self.ball.speed_y += 1
 
+          elif self.ball.speed_y == 0:
+               self.ball.speed_y += 3
+
           elif self.ball.speed_y >= -10:
                self.ball.speed_y -= 1
-          
+
 
 
      def ball_restart(self, clock):
@@ -139,10 +140,13 @@ class GameManager:
                self.ball.last_angle = 0
 
                self.ball.speed_x = self.ball.speed_x_start
-               self.ball.speed_y = random.choice([5, -5])
+               self.ball.speed_y = random.choice([5, 0, -5])
 
                self.p1.pos_y = self.p1.y_start
                self.p2.pos_y = self.p2.y_start
+
+               self.p1.speed_y = 0 
+               self.p2.speed_y = 0 
 
                # Punto ganado
                if self.ball.hitBox[0] > self.windowSize[0] // 2:
@@ -153,7 +157,7 @@ class GameManager:
 
                # Permite eventos mientras sacan
                time_elapsed = 0
-               while time_elapsed < 1000: # 1000 milisegundos (1 segundo)
+               while time_elapsed < 1200: # 1000 milisegundos (1 segundo)
                     self.draw_game()
                     self.get_event()
                     pygame.display.update()
@@ -168,8 +172,12 @@ class GameManager:
           
                # Eventos teclado
                if event.type == pygame.KEYDOWN:
+                    self.pressed_key.add(event.key)
                     if event.key == pygame.K_SPACE:
                          return True
+                    
+               if event.type == pygame.KEYUP:
+                    self.pressed_key.discard(event.key)
           return False
 
 
