@@ -1,4 +1,5 @@
-import pygame, sys
+import pygame 
+import sys
 
 from module.gameManager import GameManager
 from module.player import Player
@@ -10,7 +11,6 @@ pygame.display.set_caption('Pong Game')
 
 #Definir colores
 BLACK = (0,0,0)
-RED = (255, 0, 0)
 
 #Crear ventana
 windowSize = (900, 600)
@@ -23,13 +23,16 @@ p1 = Player(1)
 p2 = Player(2)
 game_manager = GameManager(p1, p2, ball, windowSize, screen)
 
-# Pelota
+# Ball
 ball.get_ball_start(windowSize)
 
-#Paletas jugadores
+# Players
 p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
 
+# Music
+pygame.mixer.music.load("module/resource/Veo en ti la luz.mp3")
+pygame.mixer.music.play(-1)
 
 
 # Variables para mantener el seguimiento de las teclas presionadas
@@ -53,7 +56,7 @@ while True:
 
 
      if not start_button:
-          start_button = game_manager.start_game(start_button)
+          start_button = game_manager.start_game(start_button, clock)
 
      
      # --- Zona de animación --- 
@@ -68,11 +71,12 @@ while True:
 
 
      # Movimiento de la pelota
-     game_manager.ball_restart()
+     game_manager.ball_restart(clock)
      ball.ball_movement(windowSize)
 
      # Golpeo de pelota
      game_manager.collision_ball()
+
 
      # --- Zona de dibujo ---
      game_manager.draw_game()

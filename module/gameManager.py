@@ -21,24 +21,34 @@ class GameManager:
           self.start_button = False
 
 
-     def start_game(self, start_button):
+     def start_game(self, start_button, clock):
+          WHITE = (255,255,255)
+          BLACK = (0,0,0)
+
+          tiempo_transcurrido = 0
+          tiempo_maximo = 900  # 500 milisegundos (0.5 segundos)
+
+          texto_visible = True
+          color_fondo_visible = WHITE
+
           while not start_button:
-               self.screen.fill((0,0,0)) 
-               self.start_label.set_number('START GAME')
-               self.start_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 2)
+               tiempo_transcurrido += clock.tick()
+               if tiempo_transcurrido >= tiempo_maximo:
+                    tiempo_transcurrido = 0
+                    texto_visible = not texto_visible  # Cambiar visibilidad del texto
+                    color_fondo_visible = BLACK if texto_visible else WHITE
+                    
+
+               self.screen.fill(BLACK) 
+               if texto_visible:
+                    self.start_label.set_number('PONG GAME')
+                    self.start_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 2)
+
                pygame.display.flip()
 
                if self.get_event():
                     return True
-                    
 
-               # for evt in pygame.event.get():
-               #      if evt.type == pygame.QUIT:
-               #           exit()
-
-               #      if evt.type == pygame.KEYDOWN:
-               #           if evt.key == pygame.K_SPACE:
-               #                return True
           
 
 
@@ -116,7 +126,7 @@ class GameManager:
           
 
 
-     def ball_restart(self):
+     def ball_restart(self, clock):
           if self.ball.pos_x > self.windowSize[0] + self.ball.halfSize or self.ball.pos_x <= -self.ball.halfSize:
               
                self.ball.pos_x = self.ball.x_start
@@ -136,12 +146,11 @@ class GameManager:
                else:
                     self.p2.points += 1
 
-               self.draw_game()
 
                # Permite eventos mientras sacan
-               clock = pygame.time.Clock()
                time_elapsed = 0
                while time_elapsed < 1000: # 1000 milisegundos (1 segundo)
+                    self.draw_game()
                     self.get_event()
                     pygame.display.update()
                     time_elapsed += clock.tick(60)
@@ -152,12 +161,13 @@ class GameManager:
           for event in pygame.event.get():
                if event.type == pygame.QUIT:
                     exit()
-
+          
+               # Eventos teclado
                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                          return True
-                         
           return False
+
 
 
      def player_points(self):
@@ -176,7 +186,8 @@ class GameManager:
           self.player_points()
 
           # Pelota
-          pygame.draw.rect(self.screen, self.ball.color, ((self.ball.pos_x - self.ball.halfSize), (self.ball.pos_y - self.ball.halfSize), self.ball.sizeBall, self.ball.sizeBall))
+          rectBall = (self.ball.pos_x - self.ball.halfSize), (self.ball.pos_y - self.ball.halfSize), self.ball.sizeBall, self.ball.sizeBall
+          pygame.draw.rect(self.screen, self.ball.color, (rectBall))
           
           # Jugadores
           pygame.draw.rect(self.screen, self.p1.color, (self.p1.pos_x, (self.p1.pos_y - self.p1.halfHeight), self.p1.width, self.p1.height))
