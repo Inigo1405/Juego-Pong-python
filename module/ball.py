@@ -15,7 +15,7 @@ class Ball():
         self.pos_y = None
 
         self.speed_x_start = choice([5, -5])
-        self.speed_y_start = choice([5, 0, -5])
+        self.speed_y_start = choice([5, -5])
         
         self.speed_x = self.speed_x_start
         self.speed_y = self.speed_y_start
@@ -47,6 +47,3 @@ class Ball():
         self.hitBox[1] = self.pos_y - self.halfSize
         self.hitBox[2] = self.pos_x - self.halfSize
         self.hitBox[3] = self.pos_y + self.halfSize
-
-        #print(self.hitBox)
-    

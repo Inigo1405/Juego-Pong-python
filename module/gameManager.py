@@ -140,7 +140,7 @@ class GameManager:
                self.ball.last_angle = 0
 
                self.ball.speed_x = self.ball.speed_x_start
-               self.ball.speed_y = random.choice([5, 0, -5])
+               self.ball.speed_y = random.choice([5, -5])
 
                self.p1.pos_y = self.p1.y_start
                self.p2.pos_y = self.p2.y_start
