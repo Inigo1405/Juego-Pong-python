@@ -7,8 +7,6 @@ mp_hands = mp.solutions.hands
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-
-
 with mp_hands.Hands(
     static_image_mode=False,
     max_num_hands=4,
