@@ -2,8 +2,8 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import pygame
-import threading
 import sys
+import threading
 
 from module.gameManager import GameManager
 from module.player import Player
@@ -52,7 +52,7 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
     static_image_mode=False,
     max_num_hands=4,
-    min_detection_confidence=0.6
+    min_detection_confidence=0.73
 )
 
 
@@ -81,25 +81,30 @@ def hand_tracking_thread():
           frame = np.rot90(frame)
           frame = pygame.surfarray.make_surface(frame)
           frame = pygame.transform.flip(frame, True, False)
+          frame_center_x = (900 - frame.get_width()) // 2
 
           # Mostrar el frame en la ventana de Pygame
-          screen.blit(frame, (0, 0))
+          screen.blit(frame, (frame_center_x, 0))
+          # screen.blit(frame, (0, 0))
           pygame.display.update()
           
-
-# Create the hand tracking thread
-hand_tracking_thread = threading.Thread(target=hand_tracking_thread)
-hand_tracking_thread.start()
-
+ 
 
 first_round = True
 start_button = False
 while True:
-     screen.fill(BLACK)
+     # Pinta la pantalla
+     pygame.draw.rect(screen, BLACK, (0, 120, 900, 600))
+     pygame.draw.rect(screen, BLACK, (0, 0, 370, 120))
+     pygame.draw.rect(screen, BLACK, (530, 0, 370, 120))
+     
      # Registra todo lo de la ventana
      for event in pygame.event.get():
           #Saldrá al cerrar ventana
           if event.type == pygame.QUIT:
+               cap.release()
+               cv2.destroyAllWindows()
+               pygame.quit()
                sys.exit()
 
           #* Eventos teclado
@@ -113,6 +118,9 @@ while True:
 
      if not start_button:
           start_button = game_manager.start_game(start_button, clock)
+          # Create the hand tracking thread
+          hand_tracking_thread = threading.Thread(target=hand_tracking_thread)
+          hand_tracking_thread.start()
 
 
      if first_round:
@@ -120,7 +128,7 @@ while True:
           time_elapsed = 0
           screen.fill(BLACK)
 
-          while time_elapsed < 1200: # 1000 milisegundos (1 segundo)
+          while time_elapsed < 3000: # 1000 milisegundos (1 segundo)
                game_manager.draw_game()
                game_manager.get_event()
                pygame.display.update()
@@ -160,4 +168,4 @@ while True:
      # Actualizar la pantalla completa
      pygame.display.flip()
      # Frames
-     clock.tick(60)
+     clock.tick(70)

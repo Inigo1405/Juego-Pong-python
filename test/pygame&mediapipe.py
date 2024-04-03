@@ -56,8 +56,12 @@ while True:
     frame = pygame.surfarray.make_surface(frame)
     frame = pygame.transform.flip(frame, True, False)
 
-    # Mostrar el frame en la ventana de Pygame
-    screen.blit(frame, (0, 0))
+    # Calcular las coordenadas para centrar el frame en la ventana de Pygame
+    frame_center_x = (screen_width - frame.get_width()) // 2
+    frame_center_y = (screen_height - frame.get_height()) // 2
+
+    # Mostrar el frame centrado en la ventana de Pygame
+    screen.blit(frame, (frame_center_x, frame_center_y))
     pygame.display.update()
 
     # Manejar eventos de Pygame
