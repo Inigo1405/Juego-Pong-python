@@ -12,7 +12,7 @@ class Player():
           self.numPlayer = numPlayer
 
           self.speed_y = 0 
-          self.maxSpeed = 7
+          self.maxSpeed = 10
           self.color = (255,255,255)
 
           self.y_start = None
@@ -38,7 +38,6 @@ class Player():
                self.pos_x = windowSize[0] - self.width
           
 
-     
 
      def player_movement(self, windowSize):
           if self.pos_y >= windowSize[1] - self.halfHeight:
@@ -48,6 +47,7 @@ class Player():
                self.pos_y = 0 + self.halfHeight
 
           self.pos_y += self.speed_y
+          # print(self.pos_y)
 
           #HitBox values
           self.hitBox[1] = self.pos_y - self.halfHeight
@@ -63,19 +63,20 @@ class Player():
 
 
      
-     def update_player_speed(self, pressed_key):
+     def update_player_speed(self, pressed_key, hand_pos_y=300):
+          # print(hand_pos_y)
           if self.numPlayer == 1:
-               if K_w in pressed_key:
+               if K_w in pressed_key or hand_pos_y < 300:
                     self.speed_y = -self.maxSpeed
-               elif K_s in pressed_key:
+               elif K_s in pressed_key or hand_pos_y > 300:
                     self.speed_y = self.maxSpeed
                else:
                     self.speed_y = 0
           
           elif self.numPlayer == 2:
-               if K_UP in pressed_key:
+               if K_UP in pressed_key or hand_pos_y < 300:
                     self.speed_y = -self.maxSpeed
-               elif K_DOWN in pressed_key:
+               elif K_DOWN in pressed_key  or hand_pos_y > 300:
                     self.speed_y = self.maxSpeed
                else:
                     self.speed_y = 0

@@ -2,27 +2,28 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import pygame
+import queue
 import sys
 import threading
 
+from module.ball import Ball
 from module.gameManager import GameManager
 from module.player import Player
-from module.ball import Ball
 
 
-#Inicializar la librería
+# Inicializar la librería
 pygame.init()
 pygame.display.set_caption('Pong Game')
 
-#Definir colores
+# Definir colores
 BLACK = (0,0,0)
 
-#Crear ventana
+# Crear ventana
 windowSize = (900, 600)
 screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
-#Definir objetos
+# Definir objetos
 ball = Ball(20)
 p1 = Player(1)
 p2 = Player(2)
@@ -40,6 +41,27 @@ p2.get_player_start(windowSize)
 # Inicializar la captura de video con OpenCV
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
+# Detect players variables
+position = ['left', 'right']
+
+players = [
+    {
+        'name': 'Player 1',
+        'position': 'left',
+        'x': 0,
+        'y': 0,
+        'z': 0
+    },
+    {
+        'name': 'Player 2',
+        'position': 'right',
+        'x': 0,
+        'y': 0,
+        'z': 0
+    }
+]
+
+
 # Configurar el tamaño deseado para la pantalla
 desired_width = 100
 desired_height = 100
@@ -50,15 +72,18 @@ cap.set(4, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-    static_image_mode=False,
-    max_num_hands=2,
-    min_detection_confidence=0.65,
+     min_detection_confidence=0.5,
+     static_image_mode=False,
+     max_num_hands=2,
 )
 
-
+hand_pos_queue = queue.Queue()
 def hand_tracking_thread():
+     global hand_pos_queue
      while True:
           ret, frame = cap.read()
+          x, y, c = frame.shape
+          
           if not ret:
                break
 
@@ -67,14 +92,44 @@ def hand_tracking_thread():
           frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
           # Procesar las manos
-          results = hands.process(frame_rgb)
+          result = hands.process(frame_rgb)
 
           # Dibujar las manos
-          if results.multi_hand_landmarks is not None:
-               for hand_landmarks in results.multi_hand_landmarks:
-                    mp_drawing.draw_landmarks(
-                         frame, hand_landmarks, mp_hands.HAND_CONNECTIONS
-                    )
+          if result.multi_hand_landmarks:
+               # print(len(result.multi_hand_landmarks))
+               landmarks = []
+               for hand_landmarks in result.multi_hand_landmarks:
+                    # Drawing landmarks on frames
+                    # mp_drawing.draw_landmarks(
+                    #      frame, hand_landmarks, mp_hands.HAND_CONNECTIONS
+                    # )
+                    
+                    # Get landmark 9
+                    point = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
+                    
+                    # Draw a circle for each player
+                    cv2.circle(frame, (int(point.x*y), int(point.y*x)), 5, (0, 255, 0), -1)
+                    cv2.circle(frame, (int(point.x*y), int(point.y*x)), 5, (0, 0, 255), -1)
+                    
+                    # Access to cordenates
+                    if int(point.x * windowSize[0]) >= 450:
+                         players[1]['x'] = int(point.x * windowSize[0])
+                         players[1]['y'] = int(point.y * windowSize[1])
+                         players[1]['z'] = point.z
+                    else:
+                         players[0]['x'] = int(point.x * windowSize[0])
+                         players[0]['y'] = int(point.y * windowSize[1])
+                         players[0]['z'] = point.z
+                    
+                    # hand_pos_y = int(point.y * windowSize[0])
+                    hand_pos_queue.put(players)
+
+          # Draw a line in the middle of the frame
+          cv2.line(frame, (int(y/2), 0), (int(y/2), x), (0, 0, 255), 2)
+
+          cv2.line(frame, (int(y/2)-130, 0), (int(y/2)-130, x), (150, 150, 255), 2)
+          cv2.line(frame, (int(y/2)+130, 0), (int(y/2)+130, x), (150, 150, 255), 2)
+
 
           # Convertir el frame de OpenCV a formato Pygame
           frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -89,6 +144,7 @@ def hand_tracking_thread():
           # screen.blit(frame, (0, 0))
           pygame.display.update()
           
+ 
  
 
 first_round = True
@@ -145,11 +201,22 @@ while True:
      
      #* --- Zona de animación --- 
      # Actualizar las velocidades en el bucle principal del juego
-     p1.update_player_speed(pressed_key)
-     p2.update_player_speed(pressed_key)
+     
+     # Movimiento del jugador
+     try:
+          # Movimiento con las manos
+          hand_pos_y = hand_pos_queue.get_nowait()
+          p1.update_player_speed(pressed_key, hand_pos_y[0]['y'])
+          p2.update_player_speed(pressed_key, hand_pos_y[1]['y'])
+          
+     except:
+          # Movimiento con teclas
+          # p1.update_player_speed(pressed_key)
+          # p2.update_player_speed(pressed_key)
+          pass
+        
 
-
-     #Mantiene jugadores en pantalla
+     # Mantiene jugadores en pantalla
      p1.player_movement(windowSize)
      p2.player_movement(windowSize)
 
