@@ -99,7 +99,7 @@ class Player():
                elif K_s in pressed_key or hand_pos_y > 300:
                     self.speed_y = self.maxSpeed
                else:
-                    self.speed_y = 0
+                    self.speed_y = 300
           
           elif self.numPlayer == 2:
                if K_UP in pressed_key or hand_pos_y < 300:
@@ -107,4 +107,4 @@ class Player():
                elif K_DOWN in pressed_key  or hand_pos_y > 300:
                     self.speed_y = self.maxSpeed
                else:
-                    self.speed_y = 0
+                    self.speed_y = 300

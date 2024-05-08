@@ -152,7 +152,7 @@ def hand_tracking_thread():
 first_round = True
 start_button = False
 while True:
-     # Pinta la pantalla
+     # Pinta la pantalla al rededor de la camara
      pygame.draw.rect(screen, BLACK, (0, 120, 900, 600))
      pygame.draw.rect(screen, BLACK, (0, 0, 370, 120))
      pygame.draw.rect(screen, BLACK, (530, 0, 370, 120))
@@ -236,7 +236,7 @@ while True:
 
 
      # Movimiento de la pelota
-     game_manager.ball_restart(clock, hand_pos_y)
+     game_manager.ball_restart(clock, hand_pos_y, cap)
      ball.ball_movement(windowSize)
 
      # Golpeo de pelota

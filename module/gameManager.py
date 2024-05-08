@@ -1,6 +1,7 @@
 import random
 import pygame
 from sys import exit
+from cv2 import destroyAllWindows
 
 from module.pointsMarker import Points_marker
 
@@ -139,9 +140,10 @@ class GameManager:
 
 
 
-     def ball_restart(self, clock, hand_pos_y):
+     def ball_restart(self, clock, hand_pos_y, cap):
           if self.ball.pos_x > self.windowSize[0] + self.ball.halfSize or self.ball.pos_x <= -self.ball.halfSize:
               
+               # Regresa la pelota sus valores iniciales
                self.ball.pos_x = self.ball.x_start
                self.ball.pos_y = self.ball.y_start
 
@@ -150,6 +152,7 @@ class GameManager:
                self.ball.speed_x = self.ball.speed_x_start
                self.ball.speed_y = random.choice([5, -5])
 
+               # Manda a los jugadores a sus posiciones iniciales
                self.p1.pos_y = self.p1.y_start
                self.p2.pos_y = self.p2.y_start
 
@@ -168,17 +171,21 @@ class GameManager:
 
                # Permite eventos mientras sacan
                time_elapsed = 0
-               while time_elapsed < 1200: # 1000 milisegundos (1 segundo)
+               while time_elapsed < 1200: # 1000 milisegundos '1 segundo'
                     self.draw_game()
-                    self.get_event()
+                    self.get_event(cap)
                     pygame.display.update()
                     time_elapsed += clock.tick(60)
 
                
                
-     def get_event(self):
+     def get_event(self, cap=None):
           for event in pygame.event.get():
                if event.type == pygame.QUIT:
+                    if cap:    
+                         cap.release()
+                         destroyAllWindows()
+                    pygame.quit()
                     exit()
           
                # Eventos teclado
