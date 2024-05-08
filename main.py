@@ -19,7 +19,7 @@ pygame.display.set_caption('Pong Game')
 BLACK = (0,0,0)
 
 # Crear ventana
-windowSize = (900, 600)
+windowSize = (900, 600) # W,H
 screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
@@ -39,7 +39,27 @@ p2.get_player_start(windowSize)
 
 
 # Inicializar la captura de video con OpenCV
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
+cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
+
+
+# Configurar el tamaño deseado para la pantalla
+desired_width = 160
+desired_height = 120
+
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, desired_width)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
+
+
+# Inicializar mediapipe para el seguimiento de manos
+mp_drawing = mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(
+     min_detection_confidence=0.6,
+     static_image_mode=False,
+     max_num_hands=2,
+)
+
 
 # Detect players variables
 position = ['left', 'right']
@@ -62,21 +82,6 @@ players = [
 ]
 
 
-# Configurar el tamaño deseado para la pantalla
-desired_width = 100
-desired_height = 100
-cap.set(3, desired_width)
-cap.set(4, desired_height)
-
-# Inicializar mediapipe para el seguimiento de manos
-mp_drawing = mp.solutions.drawing_utils
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(
-     min_detection_confidence=0.5,
-     static_image_mode=False,
-     max_num_hands=2,
-)
-
 hand_pos_queue = queue.Queue()
 def hand_tracking_thread():
      global hand_pos_queue
@@ -86,8 +91,12 @@ def hand_tracking_thread():
           
           if not ret:
                break
+          
+          frame = cv2.resize(frame, (desired_width, desired_height))
 
           height, width, _ = frame.shape
+          
+          # Voltear el frame horizontalmente
           frame = cv2.flip(frame, 1)
           frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -96,7 +105,6 @@ def hand_tracking_thread():
 
           # Dibujar las manos
           if result.multi_hand_landmarks:
-               # print(len(result.multi_hand_landmarks))
                landmarks = []
                for hand_landmarks in result.multi_hand_landmarks:
                     # Drawing landmarks on frames
@@ -108,27 +116,22 @@ def hand_tracking_thread():
                     point = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
                     
                     # Draw a circle for each player
-                    cv2.circle(frame, (int(point.x*y), int(point.y*x)), 5, (0, 255, 0), -1)
-                    cv2.circle(frame, (int(point.x*y), int(point.y*x)), 5, (0, 0, 255), -1)
+                    color = (0, 255, 0) if point.x * windowSize[0] >= 450 else (0, 0, 255)
+                    cv2.circle(frame, (int(point.x * desired_width), int(point.y * desired_height)), 5, color, -1)
                     
-                    # Access to cordenates
-                    if int(point.x * windowSize[0]) >= 450:
-                         players[1]['x'] = int(point.x * windowSize[0])
-                         players[1]['y'] = int(point.y * windowSize[1])
-                         players[1]['z'] = point.z
-                    else:
-                         players[0]['x'] = int(point.x * windowSize[0])
-                         players[0]['y'] = int(point.y * windowSize[1])
-                         players[0]['z'] = point.z
+                    # Decide al jugador respecto al eje 'x'
+                    player_index = 1 if int(point.x * windowSize[0]) >= 450 else 0
+    
+                    # Actualizar las coordenadas del jugador correspondiente
+                    players[player_index]['x'] = int(point.x * windowSize[0])
+                    players[player_index]['y'] = int(point.y * windowSize[1])
+                    players[player_index]['z'] = point.z
                     
-                    # hand_pos_y = int(point.y * windowSize[0])
+                    
                     hand_pos_queue.put(players)
 
           # Draw a line in the middle of the frame
-          cv2.line(frame, (int(y/2), 0), (int(y/2), x), (0, 0, 255), 2)
-
-          cv2.line(frame, (int(y/2)-130, 0), (int(y/2)-130, x), (150, 150, 255), 2)
-          cv2.line(frame, (int(y/2)+130, 0), (int(y/2)+130, x), (150, 150, 255), 2)
+          cv2.line(frame, (desired_width // 2, 0), (desired_width // 2, desired_height), (0, 0, 255), 2)
 
 
           # Convertir el frame de OpenCV a formato Pygame
@@ -141,7 +144,6 @@ def hand_tracking_thread():
 
           # Mostrar el frame en la ventana de Pygame
           screen.blit(frame, (frame_center_x, 0))
-          # screen.blit(frame, (0, 0))
           pygame.display.update()
           
  
@@ -175,6 +177,8 @@ while True:
 
      if not start_button:
           start_button = game_manager.start_game(start_button, clock)
+          pygame.mixer.music.stop()
+          
           # Create the hand tracking thread
           hand_tracking_thread = threading.Thread(target=hand_tracking_thread)
           hand_tracking_thread.start()
@@ -184,45 +188,55 @@ while True:
           # Permite eventos mientras sacan
           time_elapsed = 0
           screen.fill(BLACK)
+          
+          sound1 = pygame.mixer.Sound("module/resource/lv-3-65586.mp3")
+          channel1 = sound1.play(-1)
+          channel1.set_volume(1.0)
 
           while time_elapsed < 3000: # 1000 milisegundos (1 segundo)
                game_manager.draw_game()
                game_manager.get_event()
                pygame.display.update()
                time_elapsed += clock.tick(60)
+               
           first_round = False
 
           
-     # Music
+     # Para Vianney 
      if pygame.K_v in pressed_key: 
+          sound1.stop()
           pygame.mixer.music.load("module/resource/Veo en ti la luz.mp3")
           pygame.mixer.music.play(-1)
+          pygame.mixer.music.set_volume(1.0)
      
      
      #* --- Zona de animación --- 
-     # Actualizar las velocidades en el bucle principal del juego
-     
-     # Movimiento del jugador
      try:
           # Movimiento con las manos
           hand_pos_y = hand_pos_queue.get_nowait()
           p1.update_player_speed(pressed_key, hand_pos_y[0]['y'])
           p2.update_player_speed(pressed_key, hand_pos_y[1]['y'])
           
+          p1.player_movement_hands(windowSize, hand_pos_y[0]['y'])
+          p2.player_movement_hands(windowSize, hand_pos_y[1]['y'])
+          
      except:
-          # Movimiento con teclas
-          # p1.update_player_speed(pressed_key)
-          # p2.update_player_speed(pressed_key)
+          # print(hand_pos_queue.empty())
           pass
-        
+     
 
-     # Mantiene jugadores en pantalla
-     p1.player_movement(windowSize)
-     p2.player_movement(windowSize)
+     #? Movimiento con teclas
+     # # Actualizar las velocidades en el bucle principal del juego
+     # p1.update_player_speed(pressed_key)
+     # p2.update_player_speed(pressed_key)
+     
+     # # Mantiene jugadores en pantalla
+     # p1.player_movement(windowSize)
+     # p2.player_movement(windowSize)
 
 
      # Movimiento de la pelota
-     game_manager.ball_restart(clock)
+     game_manager.ball_restart(clock, hand_pos_y)
      ball.ball_movement(windowSize)
 
      # Golpeo de pelota
@@ -232,8 +246,7 @@ while True:
      #* --- Zona de dibujo ---
      game_manager.draw_game()
 
-
      # Actualizar la pantalla completa
      pygame.display.flip()
      # Frames
-     clock.tick(70)
+     clock.tick(75)

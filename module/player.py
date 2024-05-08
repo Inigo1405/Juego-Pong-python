@@ -47,12 +47,40 @@ class Player():
                self.pos_y = 0 + self.halfHeight
 
           self.pos_y += self.speed_y
-          # print(self.pos_y)
 
-          #HitBox values
+          # HitBox values
           self.hitBox[1] = self.pos_y - self.halfHeight
           self.hitBox[3] = self.pos_y + self.halfHeight
 
+          # Players hitbox
+          if self.numPlayer == 1:
+               self.hitBox[0] = self.pos_x + self.width
+               self.hitBox[2] = self.pos_x
+
+          elif self.numPlayer == 2:
+               self.hitBox[0] = self.pos_x + self.width
+               self.hitBox[2] = self.pos_x
+     
+     
+     def player_movement_hands(self, windowSize, ubication):
+          """
+               Esta funcion es para el movimiento de los jugadores cuando se detectan las manos, 
+               `Ubication`: Es la coordenada equivalente convertida a las dimensiones de la pantalla
+          """
+          
+          if self.pos_y >= windowSize[1] - self.halfHeight:
+               self.pos_y = windowSize[1] - self.halfHeight
+
+          if self.pos_y <= 0 + self.halfHeight:
+               self.pos_y = 0 + self.halfHeight
+
+          self.pos_y = ubication
+
+          # HitBox values
+          self.hitBox[1] = self.pos_y - self.halfHeight
+          self.hitBox[3] = self.pos_y + self.halfHeight
+
+          # Players hitbox
           if self.numPlayer == 1:
                self.hitBox[0] = self.pos_x + self.width
                self.hitBox[2] = self.pos_x

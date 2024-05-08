@@ -29,6 +29,10 @@ class GameManager:
 
           tiempo_transcurrido = 0
           texto_visible = False
+          
+          pygame.mixer.music.load("module/resource/intro.mp3")
+          pygame.mixer.music.set_volume(0.09)
+          pygame.mixer.music.play(-1)
 
           while not start_button:
                if self.get_event():
@@ -80,6 +84,10 @@ class GameManager:
 
      def bounce_off_paddle(self, side):
           self.ball.speed_x *= -1
+          
+          sound2 = pygame.mixer.Sound("module/resource/hit.mp3")
+          channel2 = sound2.play(0)
+          channel2.set_volume(1)
 
           if side == 'up':
                # Recupera la velocidad en Y
@@ -131,7 +139,7 @@ class GameManager:
 
 
 
-     def ball_restart(self, clock):
+     def ball_restart(self, clock, hand_pos_y):
           if self.ball.pos_x > self.windowSize[0] + self.ball.halfSize or self.ball.pos_x <= -self.ball.halfSize:
               
                self.ball.pos_x = self.ball.x_start
@@ -147,6 +155,9 @@ class GameManager:
 
                self.p1.speed_y = 0 
                self.p2.speed_y = 0 
+               
+               hand_pos_y[0]['y'] = self.p1.y_start
+               hand_pos_y[1]['y'] = self.p2.y_start
 
                # Punto ganado
                if self.ball.hitBox[0] > self.windowSize[0] // 2:
