@@ -6,7 +6,7 @@ from cv2 import destroyAllWindows
 from module.pointsMarker import Points_marker
 
 class GameManager:
-     def __init__(self, player1, player2, ball, windowSize, screen, pressed_key):
+     def __init__(self, player1, player2, ball, windowSize, screen, pressed_key, cap):
           self.p1 = player1
           self.p2 = player2
           self.ball = ball
@@ -21,6 +21,8 @@ class GameManager:
 
           self.start_button = False
           self.pressed_key = pressed_key
+          
+          self.cap = cap
 
 
 
@@ -140,7 +142,7 @@ class GameManager:
 
 
 
-     def ball_restart(self, clock, hand_pos_y, cap):
+     def ball_restart(self, clock, hand_pos_y):
           if self.ball.pos_x > self.windowSize[0] + self.ball.halfSize or self.ball.pos_x <= -self.ball.halfSize:
               
                # Regresa la pelota sus valores iniciales
@@ -149,7 +151,7 @@ class GameManager:
 
                self.ball.last_angle = 0
 
-               self.ball.speed_x = self.ball.speed_x_start
+               self.ball.speed_x = random.choice([5, -5])
                self.ball.speed_y = random.choice([5, -5])
 
                # Manda a los jugadores a sus posiciones iniciales
@@ -173,17 +175,17 @@ class GameManager:
                time_elapsed = 0
                while time_elapsed < 1200: # 1000 milisegundos '1 segundo'
                     self.draw_game()
-                    self.get_event(cap)
+                    self.get_event()
                     pygame.display.update()
                     time_elapsed += clock.tick(60)
 
-               
-               
-     def get_event(self, cap=None):
+
+  
+     def get_event(self):
           for event in pygame.event.get():
                if event.type == pygame.QUIT:
-                    if cap:    
-                         cap.release()
+                    if self.cap:    
+                         self.cap.release()
                          destroyAllWindows()
                     pygame.quit()
                     exit()

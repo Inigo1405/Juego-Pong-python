@@ -19,16 +19,20 @@ pygame.display.set_caption('Pong Game')
 BLACK = (0,0,0)
 
 # Crear ventana
-windowSize = (900, 600) # W,H
+windowSize = (900, 600) # W, H
 screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
+
+# Inicializar la captura de video con OpenCV
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
+# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
 
 # Definir objetos
 ball = Ball(20)
 p1 = Player(1)
 p2 = Player(2)
 pressed_key = set()
-game_manager = GameManager(p1, p2, ball, windowSize, screen, pressed_key)
+game_manager = GameManager(p1, p2, ball, windowSize, screen, pressed_key, cap)
 
 # Ball
 ball.get_ball_start(windowSize)
@@ -36,11 +40,6 @@ ball.get_ball_start(windowSize)
 # Players
 p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
-
-
-# Inicializar la captura de video con OpenCV
-# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
 
 
 # Configurar el tamaño deseado para la pantalla
@@ -55,7 +54,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-     min_detection_confidence=0.6,
+     min_detection_confidence=0.63,
      static_image_mode=False,
      max_num_hands=2,
 )
@@ -63,7 +62,6 @@ hands = mp_hands.Hands(
 
 # Detect players variables
 position = ['left', 'right']
-
 players = [
     {
         'name': 'Player 1',
@@ -93,7 +91,6 @@ def hand_tracking_thread():
                break
           
           frame = cv2.resize(frame, (desired_width, desired_height))
-
           height, width, _ = frame.shape
           
           # Voltear el frame horizontalmente
@@ -105,7 +102,6 @@ def hand_tracking_thread():
 
           # Dibujar las manos
           if result.multi_hand_landmarks:
-               landmarks = []
                for hand_landmarks in result.multi_hand_landmarks:
                     # Drawing landmarks on frames
                     # mp_drawing.draw_landmarks(
@@ -127,8 +123,8 @@ def hand_tracking_thread():
                     players[player_index]['y'] = int(point.y * windowSize[1])
                     players[player_index]['z'] = point.z
                     
-                    
                     hand_pos_queue.put(players)
+                    
 
           # Draw a line in the middle of the frame
           cv2.line(frame, (desired_width // 2, 0), (desired_width // 2, desired_height), (0, 0, 255), 2)
@@ -232,11 +228,11 @@ while True:
      
      # # Mantiene jugadores en pantalla
      # p1.player_movement(windowSize)
-     # p2.player_movement(windowSize)
+     # p2.player_movement(windowSize) 
 
 
      # Movimiento de la pelota
-     game_manager.ball_restart(clock, hand_pos_y, cap)
+     game_manager.ball_restart(clock, hand_pos_y)
      ball.ball_movement(windowSize)
 
      # Golpeo de pelota
