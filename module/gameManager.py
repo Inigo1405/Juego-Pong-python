@@ -170,8 +170,12 @@ class GameManager:
                # Punto ganado
                if self.ball.hitBox[0] > self.windowSize[0] // 2:
                     self.p1.points += 1
+                    if self.p1.points >= 10:
+                         print("p1 win! :D")
                else:
                     self.p2.points += 1
+                    if self.p2.points >= 10:
+                         print("p2 win! :D")
 
 
                # Permite eventos mientras sacan
@@ -209,11 +213,6 @@ class GameManager:
           # Indica el número de puntos
           self.p1_marker.set_text(self.p1.points)
           self.p2_marker.set_text(self.p2.points)
-          
-          if self.p1.points >= 10:
-               print("p1 win! :D")
-          if self.p2.points >= 10:
-               print("p2 win! :D")
           
           # Dibuja en pantalla los puntos
           self.p1_marker.draw(self.screen, (self.windowSize[0] // 2) - 200)

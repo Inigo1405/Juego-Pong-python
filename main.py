@@ -24,8 +24,8 @@ screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
 # Inicializar la captura de video con OpenCV
-# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
+# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
 
 # Definir objetos
 ball = Ball(20)
@@ -54,8 +54,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-     # min_detection_confidence=0.63,
-     min_detection_confidence=0.3,
+     min_detection_confidence=0.63,
+     # min_detection_confidence=0.3,
      static_image_mode=False,
      max_num_hands=2,
 )
