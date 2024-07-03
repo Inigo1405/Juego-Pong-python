@@ -1,7 +1,7 @@
-import random
 import pygame
-from sys import exit
+import random
 from cv2 import destroyAllWindows
+from sys import exit
 
 from module.pointsMarker import Points_marker
 
@@ -88,9 +88,12 @@ class GameManager:
      def bounce_off_paddle(self, side):
           self.ball.speed_x *= -1
           
-          sound2 = pygame.mixer.Sound("module/resource/hit.mp3")
-          channel2 = sound2.play(0)
-          channel2.set_volume(1)
+          try:
+               sound2 = pygame.mixer.Sound("module/resource/hit.mp3")
+               channel2 = sound2.play(0)
+               channel2.set_volume(0.7)
+          except:
+               pass
 
           if side == 'up':
                # Recupera la velocidad en Y
@@ -206,6 +209,11 @@ class GameManager:
           # Indica el número de puntos
           self.p1_marker.set_text(self.p1.points)
           self.p2_marker.set_text(self.p2.points)
+          
+          if self.p1.points >= 10:
+               print("p1 win! :D")
+          if self.p2.points >= 10:
+               print("p2 win! :D")
           
           # Dibuja en pantalla los puntos
           self.p1_marker.draw(self.screen, (self.windowSize[0] // 2) - 200)

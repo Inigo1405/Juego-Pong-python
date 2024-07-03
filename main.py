@@ -24,8 +24,8 @@ screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
 # Inicializar la captura de video con OpenCV
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
-# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
+# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
+cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
 
 # Definir objetos
 ball = Ball(20)
@@ -54,7 +54,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-     min_detection_confidence=0.63,
+     # min_detection_confidence=0.63,
+     min_detection_confidence=0.3,
      static_image_mode=False,
      max_num_hands=2,
 )
@@ -112,7 +113,7 @@ def hand_tracking_thread():
                     point = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
                     
                     # Draw a circle for each player
-                    color = (0, 255, 0) if point.x * windowSize[0] >= 450 else (0, 0, 255)
+                    color = (0, 255, 0) if point.x * windowSize[0] >= 450 else (226, 96, 255) # Color player
                     cv2.circle(frame, (int(point.x * desired_width), int(point.y * desired_height)), 5, color, -1)
                     
                     # Decide al jugador respecto al eje 'x'
@@ -220,6 +221,8 @@ while True:
           # print(hand_pos_queue.empty())
           pass
      
+     # while not hand_pos_queue.get_nowait():
+     #      pass
 
      #? Movimiento con teclas
      # # Actualizar las velocidades en el bucle principal del juego
@@ -232,6 +235,10 @@ while True:
 
 
      # Movimiento de la pelota
+     """
+          ToDo: Corregir error que es al no detectar alguna mano con mediapipe.                 
+          !NameError: name 'hand_pos_y' is not defined
+     """
      game_manager.ball_restart(clock, hand_pos_y)
      ball.ball_movement(windowSize)
 
