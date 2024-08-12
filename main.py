@@ -24,8 +24,8 @@ screen = pygame.display.set_mode(windowSize)
 clock = pygame.time.Clock()
 
 # Inicializar la captura de video con OpenCV
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # Laptop Cam
-# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) # Web Cam
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) #* Laptop Cam
+# cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) #* Web Cam
 
 # Definir objetos
 ball = Ball(20)
