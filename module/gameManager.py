@@ -16,6 +16,7 @@ class GameManager:
 
           self.title_label = Points_marker(100)
           self.start_label = Points_marker(45)
+          self.author_label = Points_marker(20)
           self.p1_marker = Points_marker()
           self.p2_marker = Points_marker()
 
@@ -54,6 +55,9 @@ class GameManager:
 
                self.title_label.set_text('PONG GAME')
                self.title_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 5)
+
+               self.author_label.set_text('By: Iñigo Quintana Delgadillo')
+               self.author_label.draw(self.screen, self.windowSize[0] // 2, self.windowSize[1] // 1.1)
 
                pygame.display.flip()
           

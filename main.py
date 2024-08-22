@@ -80,7 +80,6 @@ players = [
     }
 ]
 
-
 hand_pos_queue = queue.Queue()
 def hand_tracking_thread():
      global hand_pos_queue
@@ -172,6 +171,7 @@ while True:
                pressed_key.discard(event.key)
 
 
+     # Start game
      if not start_button:
           start_button = game_manager.start_game(start_button, clock)
           pygame.mixer.music.stop()
@@ -217,7 +217,9 @@ while True:
           p1.player_movement_hands(windowSize, hand_pos_y[0]['y'])
           p2.player_movement_hands(windowSize, hand_pos_y[1]['y'])
           
+          # print(hand_pos_y) #? [{'name': 'Player 1', 'position': 'left', 'x': 423, 'y': 309, 'z': -0.03779393061995506}, {'name': 'Player 2', 'position': 'right', 'x': 474, 'y': 300.0, 'z': -0.0713510513305664}]
      except:
+          # print(hand_pos_y) #! name 'hand_pos_y' is not defined
           # print(hand_pos_queue.empty())
           pass
      
