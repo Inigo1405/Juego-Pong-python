@@ -54,8 +54,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-     min_detection_confidence=0.63,
-     # min_detection_confidence=0.3,
+     min_detection_confidence=0.65,
      static_image_mode=False,
      max_num_hands=2,
 )
@@ -64,23 +63,13 @@ hands = mp_hands.Hands(
 # Detect players variables
 position = ['left', 'right']
 players = [
-    {
-        'name': 'Player 1',
-        'position': 'left',
-        'x': 0,
-        'y': 0,
-        'z': 0
-    },
-    {
-        'name': 'Player 2',
-        'position': 'right',
-        'x': 0,
-        'y': 0,
-        'z': 0
-    }
+    {'name': 'Player 1','position': 'left', 'x': 0,'y': 0,'z': 0},
+    {'name': 'Player 2','position': 'right','x': 0,'y': 0,'z': 0}
 ]
 
 hand_pos_queue = queue.Queue()
+
+
 def hand_tracking_thread():
      global hand_pos_queue
      while True:
@@ -147,6 +136,8 @@ def hand_tracking_thread():
 
 first_round = True
 start_button = False
+hand_pos_y = [{'name': 'Player 1', 'position': 'left', 'x': 423, 'y': windowSize[1]/2, 'z': -0.03779393061995506},
+              {'name': 'Player 2', 'position': 'right', 'x': 474, 'y': windowSize[1]/2, 'z': -0.0713510513305664}]
 while True:
      # Pinta la pantalla al rededor de la camara
      pygame.draw.rect(screen, BLACK, (0, 120, 900, 600))
@@ -208,23 +199,16 @@ while True:
      
      
      #* --- Zona de animación --- 
-     try:
-          # Movimiento con las manos
+     # Movimiento con las manos
+     if not hand_pos_queue.empty():
           hand_pos_y = hand_pos_queue.get_nowait()
-          p1.update_player_speed(pressed_key, hand_pos_y[0]['y'])
-          p2.update_player_speed(pressed_key, hand_pos_y[1]['y'])
-          
-          p1.player_movement_hands(windowSize, hand_pos_y[0]['y'])
-          p2.player_movement_hands(windowSize, hand_pos_y[1]['y'])
-          
-          # print(hand_pos_y) #? [{'name': 'Player 1', 'position': 'left', 'x': 423, 'y': 309, 'z': -0.03779393061995506}, {'name': 'Player 2', 'position': 'right', 'x': 474, 'y': 300.0, 'z': -0.0713510513305664}]
-     except:
-          # print(hand_pos_y) #! name 'hand_pos_y' is not defined
-          # print(hand_pos_queue.empty())
-          pass
      
-     # while not hand_pos_queue.get_nowait():
-     #      pass
+     p1.update_player_speed(pressed_key, hand_pos_y[0]['y'])
+     p2.update_player_speed(pressed_key, hand_pos_y[1]['y'])
+     
+     p1.player_movement_hands(windowSize, hand_pos_y[0]['y'])
+     p2.player_movement_hands(windowSize, hand_pos_y[1]['y'])
+     
 
      #? Movimiento con teclas
      # # Actualizar las velocidades en el bucle principal del juego
@@ -237,10 +221,6 @@ while True:
 
 
      # Movimiento de la pelota
-     """
-          ToDo: Corregir error que es al no detectar alguna mano con mediapipe.                 
-          !NameError: name 'hand_pos_y' is not defined
-     """
      game_manager.ball_restart(clock, hand_pos_y)
      ball.ball_movement(windowSize)
 
@@ -253,5 +233,4 @@ while True:
 
      # Actualizar la pantalla completa
      pygame.display.flip()
-     # Frames
-     clock.tick(75)
+     clock.tick(75) # Frames
