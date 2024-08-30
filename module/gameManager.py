@@ -1,7 +1,8 @@
+from cv2 import destroyAllWindows
 import pygame
 import random
-from cv2 import destroyAllWindows
 from sys import exit
+from time import sleep
 
 from module.pointsMarker import Points_marker
 
@@ -65,25 +66,20 @@ class GameManager:
 
      def collision_ball(self):
           # Identifica al jugador
-          if self.ball.pos_x < self.windowSize[0] // 2:
-               player = self.p1
-          else:
-               player = self.p2
+          player = self.p1 if self.ball.pos_x < self.windowSize[0] // 2 else self.p2
 
           ball_x1, ball_y1, ball_x2, ball_y2 = self.ball.hitBox
           plr_x1, plr_y1, plr_x2, plr_y2 = player.hitBox
 
           # Compara que impacte en la paleta
           if ball_x1 >= plr_x2 and ball_x2 <= plr_x1 and ball_y1 <= plr_y2 and ball_y2 >= plr_y1:
-               # Up
+               # Bounce off the paddle
                if self.ball.pos_y <= player.pos_y - player.height/4:
                     self.bounce_off_paddle('up')
-
-               # Down
+                    
                elif self.ball.pos_y >= player.pos_y + player.height/4:
                     self.bounce_off_paddle('down')
-
-               # Center
+                    
                else:
                     self.bounce_off_paddle('center')
 

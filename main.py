@@ -132,8 +132,11 @@ def hand_tracking_thread():
           pygame.display.update()
           
  
+# Musics
+sound_v = pygame.mixer.Sound("module/resource/Veo en ti la luz.mp3")
+sound1 = pygame.mixer.Sound("module/resource/lv-3-65586.mp3")
  
-
+# Variables
 first_round = True
 start_button = False
 hand_pos_y = [{'name': 'Player 1', 'position': 'left', 'x': 423, 'y': windowSize[1]/2, 'z': -0.03779393061995506},
@@ -174,13 +177,11 @@ while True:
 
      if first_round:
           # Permite eventos mientras sacan
-          time_elapsed = 0
           screen.fill(BLACK)
-          
-          sound1 = pygame.mixer.Sound("module/resource/lv-3-65586.mp3")
           channel1 = sound1.play(-1)
           channel1.set_volume(1.0)
 
+          time_elapsed = 0
           while time_elapsed < 3000: # 1000 milisegundos (1 segundo)
                game_manager.draw_game()
                game_manager.get_event()
@@ -193,7 +194,6 @@ while True:
      # Para Vianney 
      if pygame.K_v in pressed_key: 
           sound1.stop()
-          pygame.mixer.music.load("module/resource/Veo en ti la luz.mp3")
           pygame.mixer.music.play(-1)
           pygame.mixer.music.set_volume(1.0)
      
@@ -233,4 +233,4 @@ while True:
 
      # Actualizar la pantalla completa
      pygame.display.flip()
-     clock.tick(75) # Frames
+     clock.tick(75) # Frames por segundo
