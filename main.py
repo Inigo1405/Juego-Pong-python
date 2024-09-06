@@ -54,7 +54,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-     min_detection_confidence=0.65,
+     min_detection_confidence=0.55,
      static_image_mode=False,
      max_num_hands=2,
 )
@@ -210,8 +210,7 @@ while True:
      p2.player_movement_hands(windowSize, hand_pos_y[1]['y'])
      
 
-     #? Movimiento con teclas
-     # # Actualizar las velocidades en el bucle principal del juego
+     # Movimiento con teclas
      # p1.update_player_speed(pressed_key)
      # p2.update_player_speed(pressed_key)
      
@@ -226,7 +225,6 @@ while True:
 
      # Golpeo de pelota
      game_manager.collision_ball()
-
 
      #* --- Zona de dibujo ---
      game_manager.draw_game()

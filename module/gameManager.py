@@ -167,6 +167,8 @@ class GameManager:
                hand_pos_y[0]['y'] = self.p1.y_start
                hand_pos_y[1]['y'] = self.p2.y_start
 
+               #! Eliminar seccion de ganador
+               #ToDo: Crear una función para reiniciar el juego y mostrar al ganador
                # Punto ganado
                if self.ball.hitBox[0] > self.windowSize[0] // 2:
                     self.p1.points += 1
@@ -176,7 +178,6 @@ class GameManager:
                     self.p2.points += 1
                     if self.p2.points >= 10:
                          print("p2 win! :D")
-
 
                # Permite eventos mientras sacan
                time_elapsed = 0
