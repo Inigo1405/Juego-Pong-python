@@ -2,7 +2,6 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import pygame
-import queue
 import sys
 import threading
 
@@ -42,7 +41,7 @@ p1.get_player_start(windowSize)
 p2.get_player_start(windowSize)
 
 
-# Configurar el tamaño deseado para la pantalla
+# Configurar el tamaño deseado para la camara
 desired_width = 160
 desired_height = 120
 
@@ -54,7 +53,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, desired_height)
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-     min_detection_confidence=0.55,
+     min_detection_confidence=0.65,
      static_image_mode=False,
      max_num_hands=2,
 )
@@ -63,24 +62,21 @@ hands = mp_hands.Hands(
 # Detect players variables
 position = ['left', 'right']
 players = [
-    {'name': 'Player 1','position': 'left', 'x': 0,'y': 0,'z': 0},
-    {'name': 'Player 2','position': 'right','x': 0,'y': 0,'z': 0}
+    {'name': 'Player 1','position': 'left', 'x': 423,'y': windowSize[1]/2,'z': 0},
+    {'name': 'Player 2','position': 'right','x': 474,'y': windowSize[1]/2,'z': 0}
 ]
 
-hand_pos_queue = queue.Queue()
-
-
 def hand_tracking_thread():
-     global hand_pos_queue
+     # global players
      while True:
           ret, frame = cap.read()
-          x, y, c = frame.shape
+          # x, y, c = frame.shape
           
           if not ret:
                break
           
           frame = cv2.resize(frame, (desired_width, desired_height))
-          height, width, _ = frame.shape
+          height, width, c = frame.shape
           
           # Voltear el frame horizontalmente
           frame = cv2.flip(frame, 1)
@@ -112,8 +108,6 @@ def hand_tracking_thread():
                     players[player_index]['y'] = int(point.y * windowSize[1])
                     players[player_index]['z'] = point.z
                     
-                    hand_pos_queue.put(players)
-                    
 
           # Draw a line in the middle of the frame
           cv2.line(frame, (desired_width // 2, 0), (desired_width // 2, desired_height), (0, 0, 255), 2)
@@ -131,16 +125,15 @@ def hand_tracking_thread():
           screen.blit(frame, (frame_center_x, 0))
           pygame.display.update()
           
+          
  
 # Musics
 sound_v = pygame.mixer.Sound("module/resource/Veo en ti la luz.mp3")
-sound1 = pygame.mixer.Sound("module/resource/lv-3-65586.mp3")
+sound_1 = pygame.mixer.Sound("module/resource/lv-3-65586.mp3")
  
 # Variables
 first_round = True
 start_button = False
-hand_pos_y = [{'name': 'Player 1', 'position': 'left', 'x': 423, 'y': windowSize[1]/2, 'z': -0.03779393061995506},
-              {'name': 'Player 2', 'position': 'right', 'x': 474, 'y': windowSize[1]/2, 'z': -0.0713510513305664}]
 while True:
      # Pinta la pantalla al rededor de la camara
      pygame.draw.rect(screen, BLACK, (0, 120, 900, 600))
@@ -178,7 +171,7 @@ while True:
      if first_round:
           # Permite eventos mientras sacan
           screen.fill(BLACK)
-          channel1 = sound1.play(-1)
+          channel1 = sound_1.play(-1)
           channel1.set_volume(1.0)
 
           time_elapsed = 0
@@ -191,23 +184,25 @@ while True:
           first_round = False
 
           
-     # Para Vianney 
+     # Sorpresa Vianny
      if pygame.K_v in pressed_key: 
-          sound1.stop()
+          sound_1.stop()
           pygame.mixer.music.play(-1)
           pygame.mixer.music.set_volume(1.0)
      
      
      #* --- Zona de animación --- 
      # Movimiento con las manos
-     if not hand_pos_queue.empty():
-          hand_pos_y = hand_pos_queue.get_nowait()
+     # if not hand_pos_queue.empty():
+     #      players = hand_pos_queue.get_nowait()
      
-     p1.update_player_speed(pressed_key, hand_pos_y[0]['y'])
-     p2.update_player_speed(pressed_key, hand_pos_y[1]['y'])
      
-     p1.player_movement_hands(windowSize, hand_pos_y[0]['y'])
-     p2.player_movement_hands(windowSize, hand_pos_y[1]['y'])
+     # Movimientos de los jugadores con vision por computadora y teclas
+     # p1.update_player_speed(pressed_key, players[0]['y'])
+     # p2.update_player_speed(pressed_key, players[1]['y'])
+     
+     p1.player_movement_hands(windowSize, players[0]['y'])
+     p2.player_movement_hands(windowSize, players[1]['y'])
      
 
      # Movimiento con teclas
@@ -220,7 +215,7 @@ while True:
 
 
      # Movimiento de la pelota
-     game_manager.ball_restart(clock, hand_pos_y)
+     game_manager.ball_restart(clock, players)
      ball.ball_movement(windowSize)
 
      # Golpeo de pelota
