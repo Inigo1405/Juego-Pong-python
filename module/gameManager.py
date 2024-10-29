@@ -63,7 +63,6 @@ class GameManager:
                pygame.display.flip()
           
 
-
      def collision_ball(self):
           # Identifica al jugador
           player = self.p1 if self.ball.pos_x < self.windowSize[0] // 2 else self.p2
@@ -237,3 +236,13 @@ class GameManager:
           # Players
           pygame.draw.rect(self.screen, self.p1.color, (self.p1.pos_x, (self.p1.pos_y - self.p1.halfHeight), self.p1.width, self.p1.height))
           pygame.draw.rect(self.screen, self.p2.color, (self.p2.pos_x, (self.p2.pos_y - self.p2.halfHeight), self.p2.width, self.p2.height))
+          
+          # Center line
+          width = 2
+          dash_length = 10
+          
+          x1, y1 = (self.windowSize[0] // 2, 0)
+          x2, y2 = (self.windowSize[0] // 2, self.windowSize[1])
+
+          for y in range(y1+120, y2, dash_length * 2):
+               pygame.draw.line(self.screen, (255, 255, 255), (x1, y), (x1, y + dash_length), width)

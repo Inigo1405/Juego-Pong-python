@@ -170,7 +170,7 @@ while True:
 
 
      if first_round:
-          # Permite eventos mientras sacan
+          # Permite eventos mientras sacan los jugadores
           screen.fill(BLACK)
           channel1 = sound_1.play(-1)
           channel1.set_volume(1.0)
