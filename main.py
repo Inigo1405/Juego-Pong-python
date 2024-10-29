@@ -54,6 +54,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
      min_detection_confidence=0.65,
+     min_tracking_confidence=0.75,
      static_image_mode=False,
      max_num_hands=2,
 )
@@ -193,14 +194,6 @@ while True:
      
      #* --- Zona de animación --- 
      # Movimiento con las manos
-     # if not hand_pos_queue.empty():
-     #      players = hand_pos_queue.get_nowait()
-     
-     
-     # Movimientos de los jugadores con vision por computadora y teclas
-     # p1.update_player_speed(pressed_key, players[0]['y'])
-     # p2.update_player_speed(pressed_key, players[1]['y'])
-     
      p1.player_movement_hands(windowSize, players[0]['y'])
      p2.player_movement_hands(windowSize, players[1]['y'])
      
@@ -226,4 +219,4 @@ while True:
 
      # Actualizar la pantalla completa
      pygame.display.flip()
-     clock.tick(75) # Frames por segundo
+     clock.tick(60) # Frames por segundo

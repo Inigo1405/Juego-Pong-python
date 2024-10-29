@@ -173,11 +173,16 @@ class GameManager:
                if self.ball.hitBox[0] > self.windowSize[0] // 2:
                     self.p1.points += 1
                     if self.p1.points >= 10:
-                         print("p1 win! :D")
+                         # print("p1 win! :D")
+                         self.p1.points = 0
+                         self.p2.points = 0
+                         
                else:
                     self.p2.points += 1
                     if self.p2.points >= 10:
-                         print("p2 win! :D")
+                         # print("p2 win! :D")
+                         self.p1.points = 0
+                         self.p2.points = 0
 
                # Permite eventos mientras sacan
                time_elapsed = 0
