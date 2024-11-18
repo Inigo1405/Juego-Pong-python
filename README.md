@@ -12,10 +12,6 @@ By: Iñigo Quintana Delgadillo @inigo
 
 ---
 
-### **8. License**
-Specify the license under which your project is distributed, and link it to the `LICENSE` file if applicable.
-
-```markdown
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
