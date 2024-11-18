@@ -1,6 +1,9 @@
 # Pong
 By: Iñigo Quintana Delgadillo @inigo
 
+## Description
+
+
 ## Table of Contents
 1. [Installation](#installation)
 2. [Usage](#usage)
@@ -8,7 +11,16 @@ By: Iñigo Quintana Delgadillo @inigo
 4. [Contributing](#contributing)
 5. [License](#license)
 
----
+## Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/username/project.git
+   cd project
+   
+   python -m venv env
+   # On linux, use source env/bin/activate  # On Windows, use env\Scripts\activate
+   pip install -r requirements.txt
 
 ## Usage
 Run the main script to start the project:
