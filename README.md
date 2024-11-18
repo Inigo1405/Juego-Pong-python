@@ -8,7 +8,13 @@ By: Iñigo Quintana Delgadillo @inigo
 4. [Contributing](#contributing)
 5. [License](#license)
 
+---
 
+## Usage
+Run the main script to start the project:
+```bash
+python main.py
+```
 
 ---
 
