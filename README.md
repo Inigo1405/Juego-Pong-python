@@ -11,22 +11,42 @@ By: Iñigo Quintana Delgadillo @inigo
 4. [Contributing](#contributing)
 5. [License](#license)
 
-## Installation
+## Installation  
+Follow these steps to set up the project locally:  
 
-1. Clone this repository:
+1. Clone this repository:  
    ```bash
    git clone https://github.com/username/project.git
    cd project
-   
-   python -m venv env
-   # On linux, use source env/bin/activate  # On Windows, use env\Scripts\activate
-   pip install -r requirements.txt
+   ```
 
-## Usage
-Run the main script to start the project:
-```bash
-python main.py
-```
+2. Create and activate a virtual environment:  
+   ```bash
+   python -m venv env
+   source env/bin/activate  # On Linux/macOS
+   env\Scripts\activate     # On Windows
+   ```
+
+3. Install the required dependencies:  
+   ```bash
+   pip install -r requirements.txt
+   ```  
+
+## Usage  
+1. Start the game by running the main script:  
+   ```bash
+   python main.py
+   ```
+
+2. Use the following controls during gameplay:  
+   - **Player 1 (Left Paddle):**  
+     - Move Up: `W`  
+     - Move Down: `S`  
+   - **Player 2 (Right Paddle):**  
+     - Move Up: `Up Arrow`  
+     - Move Down: `Down Arrow`  
+
+3. Play the game and enjoy!  
 
 ---
 
