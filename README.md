@@ -1,5 +1,5 @@
 # Pong
-By: Iñigo Quintana Delgadillo @inigo
+By: [Iñigo Quintana Delgadillo](https://github.com/Inigo1405)
 
 ## Description
 
@@ -16,7 +16,7 @@ Follow these steps to set up the project locally:
 
 1. Clone this repository:  
    ```bash
-   git clone https://github.com/username/project.git
+   git clone https://github.com/Inigo1405/Juego-Pong-python.git 
    cd project
    ```
 
