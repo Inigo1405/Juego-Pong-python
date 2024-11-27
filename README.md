@@ -22,7 +22,7 @@ Follow these steps to set up the project locally:
 
 2. Create and activate a virtual environment:  
    ```bash
-   python -m venv env
+   python -m venv venv
    source env/bin/activate  # On Linux/macOS
    env\Scripts\activate     # On Windows
    ```
